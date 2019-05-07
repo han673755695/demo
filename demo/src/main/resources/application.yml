@@ -1,0 +1,5 @@
+person:
+    maps: 
+      DanJi: com.example.demo.handler.impl.DanJi
+      WangLuo: com.example.demo.handler.impl.WangLuo
+    name: zhangsan
