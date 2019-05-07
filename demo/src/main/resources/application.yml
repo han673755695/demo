@@ -3,3 +3,31 @@ person:
       DanJi: com.example.demo.handler.impl.DanJi
       WangLuo: com.example.demo.handler.impl.WangLuo
     name: zhangsan
+    
+spring:
+  freemarker:
+    template-loader-path: classpath:/templates/
+    charset: utf-8
+    cache: false
+    request-context-attribute: request
+    expose-request-attributes: true
+    expose-session-attributes: true
+    expose-spring-macro-helpers: true
+    suffix: .html
+    settings:
+      template_update_delay: 1
+      locale: zh_CN
+      datetime_format: yyyy-MM-dd HH:mm:ss
+      date_format: yyyy-MM-dd
+      number_format: #.##
+      boolean_format: true,false
+
+
+  jackson:
+    default-property-inclusion: non-null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+
