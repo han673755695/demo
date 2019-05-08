@@ -15,11 +15,21 @@ public class ResultData {
 	private String status;
 	// 返回分页信息
 	private Page page;
+	// 请求参数
+	private Object queryParams;
 	// 返回信息
 	private String message = "返回成功";
 
 	public ResultData() {
 
+	}
+
+	public Object getQueryParams() {
+		return queryParams;
+	}
+
+	public void setQueryParams(Object queryParams) {
+		this.queryParams = queryParams;
 	}
 
 	public ResultData(String status) {
