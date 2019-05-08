@@ -8,7 +8,7 @@ public class Page {
 
 	private static String DEFAULT_CURRENTPAGE = "1";
 	private static String DEFAULT_PAGESIZE = "1";
-	
+
 	// 当前页
 	private int currentPage = 1;
 	// 每页数量
@@ -19,14 +19,14 @@ public class Page {
 	private Integer totalCount;
 
 	public Page() {
-		
+
 	}
-	
-	public Page(int currentPage,int pageSize) {
+
+	public Page(int currentPage, int pageSize) {
 		this.currentPage = currentPage;
 		this.pageSize = pageSize;
 	}
-	
+
 	public int getCurrentPage() {
 		return currentPage;
 	}
@@ -43,24 +43,25 @@ public class Page {
 		this.pageSize = pageSize;
 	}
 
-	public int getPageCount() {
+	public Integer getPageCount() {
 		return pageCount;
 	}
 
-	public void setPageCount(int pageCount) {
+	public void setPageCount(Integer pageCount) {
 		this.pageCount = pageCount;
 	}
 
-	public int getTotalCount() {
+	public Integer getTotalCount() {
 		return totalCount;
 	}
 
-	public void setTotalCount(int totalCount) {
+	public void setTotalCount(Integer totalCount) {
 		this.totalCount = totalCount;
 	}
 
 	/**
-	  * 根据request中获取一个page对象
+	 * 根据request中获取一个page对象
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -76,7 +77,7 @@ public class Page {
 		Page page = new Page(Integer.parseInt(_currentPage), Integer.parseInt(_pageSize));
 		return page;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Page [currentPage=" + currentPage + ", pageSize=" + pageSize + ", pageCount=" + pageCount

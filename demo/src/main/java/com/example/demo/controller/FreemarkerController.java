@@ -36,8 +36,9 @@ public class FreemarkerController {
 		ResultData success = ResultData.getSuccess();
 		Page page = Page.getPage(request);
 		Student student = new Student("张三", 23, "playgame");
-		success.setData(student);
-		success.setPage(page);
+		success.setData(page);
+		success.setPage(null);
+		System.out.println("123");
 		return success;
 	}
 	
