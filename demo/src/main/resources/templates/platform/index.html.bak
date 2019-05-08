@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	freemarker首页<br>
+	${name!''}<br>
+	<#if list??>
+		<#list list as item>
+			${item_index} = ${item}<br>
+		</#list>
+	</#if>
+	<hr>
+	<#if list??>
+		<#list dataMap?keys as key>
+			${key}=${dataMap[key]}<br>
+		</#list>
+	</#if>
+	<!-- 从session中获取值 -->
+	${sessionName!''}
+</body>
+</html>

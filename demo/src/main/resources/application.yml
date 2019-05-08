@@ -5,6 +5,10 @@ person:
     name: zhangsan
     
 spring:
+  resources:
+    static-locations: classpath:/static/,classpath:/public/
+    
+    
   freemarker:
     template-loader-path: classpath:/templates/
     charset: utf-8
