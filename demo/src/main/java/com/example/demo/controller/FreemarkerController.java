@@ -23,10 +23,6 @@ import com.example.demo.service.IUserService;
 @RequestMapping("/freemarker")
 public class FreemarkerController {
 
-	@Autowired
-	private IUserService userService;
-	
-	
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
 		//字符串类型的值
@@ -58,18 +54,6 @@ public class FreemarkerController {
 		success.setData(student);
 		success.setPage(page);
 		System.out.println("123");
-		return success;
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping("/getUser")
-	public ResultData getUser(Model model, HttpServletRequest request) {
-		ResultData success = ResultData.getSuccess();
-		Page page = Page.getPage(request);
-		User user = userService.getUser();
-		success.setData(user);
-		success.setPage(page);
 		return success;
 	}
 	
