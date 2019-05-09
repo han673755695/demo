@@ -25,7 +25,7 @@
         <!--滚动策略-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
-            <fileNamePattern>D:/log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>D:/log/log.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
@@ -57,7 +57,7 @@
     <!--引用哪个配置-->
     <root level="info">
         <appender-ref ref="consoleLogger"/>
-        <!-- <appender-ref ref="fileInfoLog"/>
-        <appender-ref ref="fileErrorLog"/> -->
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileErrorLog"/>
     </root>
 </configuration>
