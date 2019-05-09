@@ -1,6 +1,8 @@
 package com.example.demo.domain;
 
-public class Student {
+public class User {
+
+	private String id;
 
 	private String name;
 
@@ -8,15 +10,23 @@ public class Student {
 
 	private String hobby;
 
-	public Student() {
+	public User() {
 		super();
 	}
 
-	public Student(String name, int age, String hobby) {
+	public User(String name, int age, String hobby) {
 		super();
 		this.name = name;
 		this.age = age;
 		this.hobby = hobby;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -45,7 +55,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return "Student [name=" + name + ", age=" + age + ", hobby=" + hobby + "]";
+		return "Student [id=" + id + ", name=" + name + ", age=" + age + ", hobby=" + hobby + "]";
 	}
 
 }

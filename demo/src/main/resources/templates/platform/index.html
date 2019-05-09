@@ -66,11 +66,12 @@
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('统计页面','welcome1.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>统计页面</cite></a>
+                                <a onclick="xadmin.add_tab('统计页面','${base}/platform/welcome1.html')">
+	                                <i class="iconfont">&#xe6a7;</i>
+	                                <cite>统计页面</cite>
+                                </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a onclick="xadmin.add_tab('会员列表(静态表格)','member-list.html')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>会员列表(静态表格)</cite></a>
@@ -102,10 +103,10 @@
                                             <cite>等级管理</cite></a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> -->
                         </ul>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="订单管理">&#xe723;</i>
                             <cite>订单管理</cite>
@@ -308,7 +309,7 @@
                                     <cite>notice 通知控件</cite></a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -344,7 +345,14 @@
                 hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
                 var s = document.getElementsByTagName("script")[0];
                 s.parentNode.insertBefore(hm, s);
-            })();</script>
+            })();
+            
+            $(function(){
+            	console.log("jquery");
+            	
+            });
+            
+        </script>
     </body>
 
 </html>

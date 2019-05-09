@@ -1,3 +1,4 @@
+###策略模式
 person:
     maps: 
       DanJi: com.example.demo.handler.impl.DanJi
@@ -5,10 +6,11 @@ person:
     name: zhangsan
     
 spring:
+####静态资源配置
   resources:
     static-locations: classpath:/static/,classpath:/public/
     
-    
+###freemarker配置
   freemarker:
     template-loader-path: classpath:/templates/
     charset: utf-8
@@ -26,12 +28,26 @@ spring:
       number_format: #.##
       boolean_format: true,false
 
-
+###json配置
   jackson:
     default-property-inclusion: always
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
+
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/admin?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:sqlMapConfig.xml
+  type-aliases-package: com.example.demo.domain
+
 
 

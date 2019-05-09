@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +16,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.domain.Page;
 import com.example.demo.domain.ResultData;
-import com.example.demo.domain.Student;
+import com.example.demo.domain.User;
+import com.example.demo.service.IUserService;
 
 @Controller
 @RequestMapping("/freemarker")
 public class FreemarkerController {
 
+	@Autowired
+	private IUserService userService;
+	
+	
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
 		//字符串类型的值
@@ -48,10 +54,22 @@ public class FreemarkerController {
 	public ResultData two(Model model, HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
 		Page page = Page.getPage(request);
-		Student student = new Student("张三", 23, "playgame");
+		User student = new User("张三", 23, "playgame");
 		success.setData(student);
 		success.setPage(page);
 		System.out.println("123");
+		return success;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/getUser")
+	public ResultData getUser(Model model, HttpServletRequest request) {
+		ResultData success = ResultData.getSuccess();
+		Page page = Page.getPage(request);
+		User user = userService.getUser();
+		success.setData(user);
+		success.setPage(page);
 		return success;
 	}
 	
