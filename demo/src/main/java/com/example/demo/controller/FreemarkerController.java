@@ -1,13 +1,9 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,25 +19,15 @@ import com.example.demo.service.IUserService;
 @RequestMapping("/freemarker")
 public class FreemarkerController {
 
+	private final Logger logger = LoggerFactory.getLogger(FreemarkerController.class);
+	
+	@Autowired
+	private IUserService userService;
+	
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
-		//字符串类型的值
-		model.addAttribute("name", "张三");
-		//list类型的值
-		List list = new ArrayList();
-		list.add(0);
-		list.add(1);
-		list.add(2);
-		model.addAttribute("list", list);
-		//map类型的值
-		Map<String,Object> dataMap = new HashMap();
-		dataMap.put("key1", "value1");
-		dataMap.put("key2", "value2");
-		dataMap.put("key3", "value3");
-		dataMap.put("key4", "value4");
-		model.addAttribute("dataMap", dataMap);
-		HttpSession session = request.getSession();
-		session.setAttribute("sessionName", "ok");
+		User user = userService.getUser();
+		logger.info(user.toString());
 		return "/platform/index";
 	}
 	

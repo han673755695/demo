@@ -41,7 +41,7 @@ public class IndexController {
 	 */
 	@RequestMapping("/toWelcome")
 	public String toWelcome(Model model, HttpServletRequest request) {
-		logger.info("进入后台管理首页");
+		logger.info("进入后台管理欢迎页面");
 		return "/platform/welcome";
 	}
 	
