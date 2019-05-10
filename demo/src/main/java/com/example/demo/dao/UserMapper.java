@@ -6,6 +6,6 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserDao {
+public interface UserMapper {
 	public List<Map<String, Object>> getUserList();
 }

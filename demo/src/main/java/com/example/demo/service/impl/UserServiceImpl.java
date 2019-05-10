@@ -6,14 +6,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dao.UserDao;
+import com.example.demo.dao.UserMapper;
 import com.example.demo.service.IUserService;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
-    private UserDao userDao;
+    private UserMapper userDao;
 	
 	@Override
 	public List<Map<String, Object>> getUser() {
