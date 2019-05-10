@@ -10,6 +10,12 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
+
+/**
+ * jackson格式化空值为字符串	""
+ * @author my
+ *
+ */
 @Configuration
 public class CustomConfig {
 

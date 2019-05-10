@@ -1,10 +1,11 @@
 package com.example.demo.dao;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.Map;
 
-import com.example.demo.domain.User;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao {
-	public User getUser();
+	public List<Map<String, Object>> getUserList();
 }

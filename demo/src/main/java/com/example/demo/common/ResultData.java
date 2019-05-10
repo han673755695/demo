@@ -1,7 +1,12 @@
-package com.example.demo.domain;
+package com.example.demo.common;
 
 import java.util.Map;
 
+/**
+ * 返回的数据结构
+ * @author my
+ *
+ */
 public class ResultData {
 
 	private static String SUCCESS = "success";

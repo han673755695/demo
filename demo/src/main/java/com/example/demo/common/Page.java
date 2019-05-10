@@ -1,9 +1,15 @@
-package com.example.demo.domain;
+package com.example.demo.common;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.StringUtils;
 
+
+/**
+ * 分页对象
+ * @author my
+ *
+ */
 public class Page {
 
 	private static String DEFAULT_CURRENTPAGE = "1";

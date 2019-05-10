@@ -4,6 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
+/**
+ * 全局错误页请求跳转路径
+ * @author my
+ *
+ */
 @Controller
 public class ErrorPageController {
 	@RequestMapping(value = "/error400Page")

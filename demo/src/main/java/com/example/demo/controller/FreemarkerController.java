@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -10,8 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.domain.Page;
-import com.example.demo.domain.ResultData;
+import com.example.demo.common.Page;
+import com.example.demo.common.ResultData;
 import com.example.demo.domain.User;
 import com.example.demo.service.IUserService;
 
@@ -26,7 +30,7 @@ public class FreemarkerController {
 	
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
-		User user = userService.getUser();
+		List<Map<String, Object>> user = userService.getUser();
 		logger.info(user.toString());
 		return "/platform/index";
 	}
@@ -36,8 +40,8 @@ public class FreemarkerController {
 	public ResultData two(Model model, HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
 		Page page = Page.getPage(request);
-		User student = new User("张三", 23, "playgame");
-		success.setData(student);
+		List<Map<String, Object>> user = userService.getUser();
+		success.setData(user);
 		success.setPage(page);
 		System.out.println("123");
 		return success;

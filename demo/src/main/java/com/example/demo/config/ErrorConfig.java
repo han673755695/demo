@@ -6,6 +6,11 @@ import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
+/**
+ * 全局错误页配置
+ * @author my
+ *
+ */
 @Configuration
 public class ErrorConfig implements ErrorPageRegistrar {
 

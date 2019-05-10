@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.UserDao;
-import com.example.demo.domain.User;
 import com.example.demo.service.IUserService;
 
 @Service
@@ -14,11 +16,11 @@ public class UserServiceImpl implements IUserService {
     private UserDao userDao;
 	
 	@Override
-	public User getUser() {
+	public List<Map<String, Object>> getUser() {
 		
 		try {
-			User user = userDao.getUser();
-			return user;
+			List<Map<String, Object>> userList = userDao.getUserList();
+			return userList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();

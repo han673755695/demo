@@ -9,6 +9,15 @@ spring:
 ####静态资源配置
   resources:
     static-locations: classpath:/static/,classpath:/public/
+
+###json配置
+  jackson:
+    default-property-inclusion: always
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
     
 ###freemarker配置
   freemarker:
@@ -28,20 +37,38 @@ spring:
       number_format: #.##
       boolean_format: true,false
 
-###json配置
-  jackson:
-    default-property-inclusion: always
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-    serialization:
-      write-dates-as-timestamps: false
+
 
 
   datasource:
-    url: jdbc:mysql://localhost:3306/admin?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:mysql://localhost:3306/admin?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: 123456
+      #连接池建立时创建的初始化连接数
+      driver-class-name: com.mysql.jdbc.Driver
+      #连接池中最大的活跃连接数
+      initial-size: 5
+      #连接池中最小的活跃连接数
+      max-active: 20
+      #连接池中最小的活跃连接数
+      min-idle: 5
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      #spring.datasource.druid.max-open-prepared-statements:  #和上面的等价
+      validation-query: SELECT 1 FROM DUAL
+      validation-query-timeout: 30000
+      #是否在获得连接后检测其可用性
+      test-on-borrow: false
+      #是否在连接放回连接池后检测其可用性
+      test-on-return: false
+      #是否在连接空闲一段时间后检测其可用性
+      test-while-idle: true
+
 
 
 mybatis:

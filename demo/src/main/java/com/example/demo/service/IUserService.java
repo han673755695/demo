@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.User;
+import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
 
-	public User getUser();
+	public List<Map<String, Object>> getUser();
 }

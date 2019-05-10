@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-<meta charset="UTF-8">
-</head>
-<body>
-	<p>${code!''}</p>
-	<p>${msg!''}</p>
-</body>
+<!doctype html>
+<html class="x-admin-sm">
+    <meta charset="UTF-8">
+	<#include "platform/common/head.html">
+	<@aHead title="后台登录-X-admin2.2" />
+    <body>
+          <div class="layui-container">
+           <div class="fly-panel"> 
+            <div class="fly-none"> 
+             <h2><i class="layui-icon layui-icon-404"></i></h2> 
+             <p>页面或者数据被<a href=""> 纸飞机 </a>运到火星了，啥都看不到了…</p> 
+             <p>${code!''}</p>
+			 <p>${msg!''}</p>
+            </div>
+           </div>
+          </div>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+    </body>
 </html>
