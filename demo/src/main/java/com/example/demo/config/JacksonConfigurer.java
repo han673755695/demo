@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -13,8 +14,11 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 
 /**
@@ -37,6 +41,16 @@ public class JacksonConfigurer implements WebMvcConfigurer{
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	    mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+	    
+	    mapper.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
+			@Override
+			public void serialize(Object paramT, JsonGenerator paramJsonGenerator,
+					SerializerProvider paramSerializerProvider) throws IOException {
+				// 设置返回null转为 空字符串""
+				paramJsonGenerator.writeString("");
+			}
+		});
+	    
 	    converter.setObjectMapper(mapper);
 	    return converter;
 	}
