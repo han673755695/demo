@@ -1,13 +1,12 @@
 <!doctype html>
 <html class="x-admin-sm">
 	<meta charset="UTF-8">
-	<#include "common/head.html">
+	<#include "common/head.html"/>
 	<@aHead title="后台登录-X-admin2.2" />
     <body class="index">
         <!-- 顶部开始 -->
         <div class="container">
             <div class="logo">
-                <!-- <a href="./index.html">X-admin v2.2</a></div> -->
                 <a href="${base}/platform/index.html">X-admin v2.2</a></div>
             <div class="left_open">
                 <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
@@ -71,9 +70,10 @@
                                 </a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('会员列表(静态表格)','member-list.html')">
+                                <a onclick="xadmin.add_tab('会员列表','${base}/admin/consumer/consumerList')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>会员列表(静态表格)</cite></a>
+                                    <cite>会员列表(静态表格)</cite>
+                                </a>
                             </li>
                             <li>
                                 <a onclick="xadmin.add_tab('会员列表(动态表格)','member-list1.html',true)">

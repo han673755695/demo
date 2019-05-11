@@ -9,8 +9,10 @@ import java.util.Map;
  */
 public class ResultData {
 
-	private static String SUCCESS = "success";
-	private static String ERROR = "error";
+	public static final String DATAKEY = "resultdata";
+	
+	public static String SUCCESS = "success";
+	public static String ERROR = "error";
 
 	// 存放数据map
 	private Map<String, Object> mapData;

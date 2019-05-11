@@ -31,8 +31,6 @@ import com.example.demo.utils.UUIDUtils;
 public class MenuController {
 
 	@Autowired
-	private IUserService userService;
-	@Autowired
 	private IMenuService menuService;
 	
 	private final Logger logger = LoggerFactory.getLogger(MenuController.class);
@@ -47,43 +45,52 @@ public class MenuController {
 	@ResponseBody
 	public ResultData menuListJson(Model model, HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
-		logger.info("获取菜单list");
-		Menu menu = new Menu();
-		menu.setId("123456");
-		List<Menu> list = menuService.selectListByMenu(menu);
-		logger.info(list.toString());
-		success.setData(list);
+		try {
+			logger.info("获取菜单list");
+			Menu menu = new Menu();
+			menu.setId("123456");
+			List<Menu> list = menuService.selectListByMenu(menu);
+			logger.info(list.toString());
+			success.setData(list);
+		} catch (Exception e) {
+			success.setStatus(ResultData.ERROR);
+			success.setMessage(e.getMessage());
+			e.printStackTrace();
+		}
 		return success;
 	}
 	
-	@RequestMapping("/userList")
-	@ResponseBody
-	public TableResultData getUserList() {
-		List<Map<String,Object>> user = userService.getUser();
-		TableResultData tableResultData = new TableResultData();
-		tableResultData.setData(user);
-		return tableResultData;
-	}
 	
+	/**
+	  * 保存菜单
+	 * @param model
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/saveMenu")
 	@ResponseBody
-	public ResultData saveMenu(Model model, HttpServletRequest request) {
+	public ResultData saveMenu(Model model, HttpServletRequest request, Menu menu) {
 		ResultData success = ResultData.getSuccess();
-		logger.info("获取菜单list");
-		Menu menu = new Menu();
-		menu.setId(UUIDUtils.getUUID());
-		menu.setParentId("-1");
-		menu.setCreateDate(new Date());
-		menu.setUpdateDate(new Date());
-		menu.setName("会员管理");
-		menu.setSort("1");
-		menu.setStatus("1");
-		menu.setUrl("");
-		menu.setIsParent("1");
-		
-		int insertActive = menuService.insertActive(menu);
-		logger.info(String.valueOf(insertActive));
-		success.setData(insertActive);
+		try {
+			logger.info("保存菜单");
+			menu.setId(UUIDUtils.getUUID());
+			menu.setParentId("-1");
+			menu.setCreateDate(new Date());
+			menu.setUpdateDate(new Date());
+			menu.setName("会员管理");
+			menu.setSort("1");
+			menu.setStatus("1");
+			menu.setUrl("");
+			menu.setIsParent("1");
+			
+			int insertActive = menuService.insertActive(menu);
+			logger.info(String.valueOf(insertActive));
+			success.setData(insertActive);
+		} catch (Exception e) {
+			success.setStatus(ResultData.ERROR);
+			success.setMessage(e.getMessage());
+			e.printStackTrace();
+		}
 		return success;
 	}
 	

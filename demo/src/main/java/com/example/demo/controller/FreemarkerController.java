@@ -18,6 +18,7 @@ import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
 import com.example.demo.domain.User;
 import com.example.demo.service.IUserService;
+import com.example.demo.utils.RequestParamUtils;
 
 @Controller
 @RequestMapping("/freemarker")
@@ -30,8 +31,7 @@ public class FreemarkerController {
 	
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
-		List<Map<String, Object>> user = userService.getUser();
-		logger.info(user.toString());
+		
 		return "/platform/index";
 	}
 	
@@ -40,8 +40,9 @@ public class FreemarkerController {
 	public ResultData two(Model model, HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
 		Page page = Page.getPage(request);
-		List<Map<String, Object>> user = userService.getUser();
-		success.setData(user);
+		Map parameterMap = RequestParamUtils.getParameterMap(request);
+		List<Map<String, Object>> userList = userService.selectBySelective(parameterMap);
+		success.setData(userList);
 		success.setPage(page);
 		System.out.println("123");
 		return success;
