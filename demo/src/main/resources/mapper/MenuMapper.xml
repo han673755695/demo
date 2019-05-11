@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.MenuMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.example.demo.domain.Menu">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId"
+			jdbcType="VARCHAR" />
+		<result column="create_date" property="createDate"
+			jdbcType="TIMESTAMP" />
+		<result column="update_date" property="updateDate"
+			jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="VARCHAR" />
+		<result column="is_parent" property="isParent"
+			jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id, parent_id, create_date, update_date, name, status, sort, is_parent,
+		url
+	</sql>
+	
+	<!-- 根据实体类查询 -->
+	<select id="selectListByMenu" resultMap="BaseResultMap"
+		parameterType="com.example.demo.domain.Menu">
+		select
+			<include refid="Base_Column_List" />
+		from admin_menu
+	</select>
+	
+	<!-- 根据主键id查询 -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from admin_menu
+		where id = #{id}
+	</select>
+	
+	<!-- 根据主键id删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_menu
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 添加数据 -->
+	<insert id="insert"
+		parameterType="com.example.demo.domain.Menu">
+		insert into admin_menu 
+			(id, parent_id, create_date,update_date, name, status,sort, is_parent, url)
+		values 
+			(#{id}, #{parentId},#{createDate},#{updateDate}, #{name}, #{status},#{sort}, #{isParent},#{url})
+	</insert>
+	
+	<!-- 动态添加数据 -->
+	<insert id="insertActive"
+		parameterType="com.example.demo.domain.Menu">
+		insert into admin_menu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="updateDate != null">
+				update_date,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="isParent != null">
+				is_parent,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=VARCHAR},
+			</if>
+			<if test="isParent != null">
+				#{isParent,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveByMenu" parameterType="map">
+		update admin_menu
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=VARCHAR},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createDate != null">
+				create_date = #{record.createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateDate != null">
+				update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sort != null">
+				sort = #{record.sort,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isParent != null">
+				is_parent = #{record.isParent,jdbcType=VARCHAR},
+			</if>
+			<if test="record.url != null">
+				url = #{record.url,jdbcType=VARCHAR},
+			</if>
+		</set>
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateByMenu" parameterType="map">
+		update admin_menu
+		set id = #{record.id,jdbcType=VARCHAR},
+		parent_id = #{record.parentId,jdbcType=VARCHAR},
+		create_date = #{record.createDate,jdbcType=TIMESTAMP},
+		update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+		name = #{record.name,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=VARCHAR},
+		sort = #{record.sort,jdbcType=VARCHAR},
+		is_parent = #{record.isParent,jdbcType=VARCHAR},
+		url = #{record.url,jdbcType=VARCHAR}
+		
+	</update>
+</mapper>
