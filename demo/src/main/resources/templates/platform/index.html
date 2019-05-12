@@ -61,7 +61,8 @@
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="会员管理">&#xe6b8;</i>
                             <cite>会员管理</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
                         <ul class="sub-menu">
                             <li>
                                 <a onclick="xadmin.add_tab('统计页面','${base}/admin/statistics/toStatistics')">
@@ -103,6 +104,25 @@
                                     </li>
                                 </ul>
                             </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="菜单管理">&#xe723;</i>
+                            <cite>菜单管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('菜单列表','order-list.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>菜单列表</cite></a>
+                            </li>
+                            <!-- <li>
+                                <a onclick="xadmin.add_tab('订单列表1','order-list1.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>菜单列表1</cite></a>
+                            </li> -->
                         </ul>
                     </li>
                     <li>
@@ -318,8 +338,8 @@
         <div class="page-content">
             <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
                 <ul id="tabUl" class="layui-tab-title">
-                    <li class="home">
-                        <i class="layui-icon">&#xe68e;</i>我的桌面</li></ul>
+                    <li class="home" lay-id="038a139703cac67ae15708a9b6bd3f85">
+                        <i class="layui-icon">&#xe68e;</i>桌面</li></ul>
                 <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
                     <dl>
                         <dd data-type="this">关闭当前</dd>
@@ -328,7 +348,7 @@
                 </div>
                 <div class="layui-tab-content" id="iframe">
                     <div class="layui-tab-item layui-show">
-                        <iframe src='${base}/admin/index/toWelcome' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                        <iframe src='${base}/admin/index/toWelcome' tab-id="038a139703cac67ae15708a9b6bd3f85" frameborder="0" scrolling="yes" class="x-iframe"></iframe>
                     </div>
                 </div>
                 <div id="tab_show"></div>
