@@ -81,7 +81,6 @@
 								data: data.field,
 								dataType: "json", //xml、html、script、jsonp、text
 								success: function(dataResult) {
-									console.log(dataResult.status)
 									if(dataResult && dataResult.status == 'success'){
 										layer.alert("操作成功", {icon: 6},function() {
 											//关闭当前frame

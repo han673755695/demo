@@ -92,4 +92,11 @@ public class Menu {
     public void setUrl(String url) {
         this.url = url == null ? null : url.trim();
     }
+
+	@Override
+	public String toString() {
+		return "Menu [id=" + id + ", parentId=" + parentId + ", createDate=" + createDate + ", updateDate=" + updateDate
+				+ ", name=" + name + ", status=" + status + ", sort=" + sort + ", isParent=" + isParent + ", url=" + url
+				+ "]";
+	}
 }

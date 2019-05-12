@@ -29,7 +29,7 @@ public class MenuServiceImpl implements IMenuService {
 	public int deleteByPrimaryKey(String id) {
 		try {
 
-			return 0;
+			return menuMapper.deleteByPrimaryKey(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("删除数据失败");
@@ -40,7 +40,7 @@ public class MenuServiceImpl implements IMenuService {
 	public int insert(Menu menu) {
 		try {
 
-			return 0;
+			return menuMapper.insert(menu);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("添加数据失败");
@@ -61,8 +61,7 @@ public class MenuServiceImpl implements IMenuService {
 	@Override
 	public Menu selectByPrimaryKey(String id) {
 		try {
-
-			return null;
+			return menuMapper.selectByPrimaryKey(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("获取数据失败");
@@ -73,7 +72,7 @@ public class MenuServiceImpl implements IMenuService {
 	public int updateActiveByMenu(Menu menu) {
 		try {
 
-			return 0;
+			return menuMapper.updateActiveByMenu(menu);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("修改数据失败");
@@ -84,7 +83,7 @@ public class MenuServiceImpl implements IMenuService {
 	public int updateByMenu(Menu menu) {
 		try {
 
-			return 0;
+			return menuMapper.updateByMenu(menu);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("修改数据失败");

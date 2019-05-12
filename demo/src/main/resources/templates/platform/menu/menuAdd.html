@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+	<meta charset="UTF-8">
+	<#include "../common/head.html"/>
+	<@aHead title="后台登录-X-admin2.2" />
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row">
+				<form class="layui-form">
+					<div class="layui-form-item">
+						<label for="name" class="layui-form-label">
+                            <span class="x-red">*</span>菜单名称</label>
+						<div class="layui-input-inline">
+							<input type="text" id="name" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+					</div>
+					<div class="layui-form-item">
+						<label for="url" class="layui-form-label">
+                            <span id="span" class="x-red"></span>url地址</label>
+						<div class="layui-input-inline">
+							<input type="text" id="url" name="url" required="" lay-verify="" autocomplete="off" class="layui-input"></div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">选择父菜单</label>
+						<div class="layui-input-inline">
+							<select id="parentId" name="parentId" lay-search="">
+								<option value="">直接选择或搜索选择</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+		                <label class="layui-form-label"><span class="x-red">*</span>是否是父菜单</label>
+		                <div class="layui-input-block">
+			                <input type="radio" name="isParent" value="1" lay-skin="primary" title="是" >
+			                <input type="radio" name="isParent" value="2" lay-skin="primary" title="否">
+		                </div>
+	                </div>
+					<div class="layui-form-item">
+		                <label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
+		                <div class="layui-input-block">
+			                <input type="radio" name="status" value="1" lay-skin="primary" title="是">
+			                <input type="radio" name="status" value="2" lay-skin="primary" title="否">
+		                </div>
+	                </div>
+					<div class="layui-form-item">
+						<label for="sort" class="layui-form-label">
+                            <span class="x-red">*</span>排序</label>
+						<div class="layui-input-inline">
+							<input type="text" id="sort" name="sort" required="" lay-verify="number" autocomplete="off" class="layui-input"></div>
+					</div>
+					<div class="layui-form-item">
+						<label for="L_repass" class="layui-form-label"></label>
+						<button class="layui-btn" lay-filter="add" lay-submit="">增加</button></div>
+				</form>
+			</div>
+		</div>
+		<script>
+			layui.use(['form', 'layer'],
+				function() {
+					$ = layui.jquery;
+					var form = layui.form,
+						layer = layui.layer;
+					
+					//监听提交
+					form.on('submit(add)',
+						function(dataJson) {
+							console.log(JSON.stringify(dataJson.field));
+							
+							$.ajax({
+								type: "POST", //GET或POST,
+								async:true, //默认设置为true，所有请求均为异步请求。
+								url: "${base}/admin/menu/saveMenu",
+								data: dataJson.field,
+								dataType: "json", //xml、html、script、jsonp、text
+								success: function(dataResult) {
+									if(dataResult && dataResult.status == 'success'){
+										layer.alert("操作成功", {icon: 6},function() {
+											//关闭当前frame
+											xadmin.close();
+											// 可以对父窗口进行刷新 
+											xadmin.father_reload();
+										});
+									}else{
+										layer.alert('保存失败', {icon: 5});
+									}
+								},
+								error:function(){
+									layer.alert('保存失败', {icon: 5});
+								}
+							});
+							return false;
+						});
+
+				});
+		</script>
+		<script>
+			initParentMenu();
+			/* 初始化父菜单选项 */
+			function initParentMenu(){
+				$.ajax({
+					type: "POST", //GET或POST,
+					async:true, //默认设置为true，所有请求均为异步请求。
+					url: "${base}/admin/menu/menuList/json",
+					data: {},
+					dataType: "json", //xml、html、script、jsonp、text
+					success: function(dataResult) {
+						if(dataResult && dataResult.status == 'success'){
+							console.log("data" + JSON.stringify(dataResult.data));
+							appendOption(dataResult.data);
+						}else{
+							layer.alert('初始化失败', {icon: 5});
+						}
+					},
+					error:function(){
+						layer.alert('初始化失败', {icon: 5});
+					},
+				});
+			}
+			
+			function appendOption(data){
+				var options = '<option value="">直接选择或搜索选择</option>';
+				$.each(data, function(index,menu){
+					options += '<option value="' + menu.id + '">' + menu.name + '</option>';
+				});
+				$("#parentId").html(options);
+			}
+			
+			/* $("#no").click(function(){
+				alert("ok")
+				$("url").attr("lay-verify","required");
+				$("span").text("*");
+			}); */
+			
+			/* $("input[name='isParent']").on('click',function(){
+			    var sex = $(this).val();
+			    alert(sex);
+			}); */
+			
+		</script>
+	</body>
+
+</html>

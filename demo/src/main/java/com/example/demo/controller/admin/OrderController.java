@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  */
 @Controller
-@RequestMapping("/admin/consumer")
+@RequestMapping("/admin/order")
 public class OrderController {
 
 	private final Logger logger = LoggerFactory.getLogger(OrderController.class);
