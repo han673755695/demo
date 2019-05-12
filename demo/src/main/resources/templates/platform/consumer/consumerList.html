@@ -321,13 +321,14 @@
 			html += '<span class="layui-btn layui-btn-normal layui-btn-mini">' + status + '</span>'
 					+ '</td>'
 					+ '<td class="td-manage">'
-					+ ' <a onclick="member_stop(this,"10001")" href="javascript:;" title="可用">' 
+					+ ' <a onclick="member_stop(this,\'10001\')" href="javascript:;" title="可用">' 
 					+ ' <i class="layui-icon">&#xe601;</i>'
-					+ ' </a>'
-					+ ' <a title="编辑" onclick="xadmin.open("编辑","${base}/admin/consumer/consumerEdit?id=' + user.id + '",600,400)" href="javascript:;">'
+					+ ' </a>';
+					var url = "${base}\/admin\/consumer\/consumerEdit?id=" + user.id;
+			html += ' <a title="编辑" onclick="xadmin.open(\'编辑\',\'' + url + '\',600,400)" href="javascript:;">'
 					+ ' <i class="layui-icon">&#xe642;</i>'
 					+ ' </a>'
-					+ ' <a title="删除" onclick="member_del(this,' + user.id + ')" href="javascript:;">'
+					+ ' <a title="删除" onclick="member_del(this,\'' + user.id + '\')" href="javascript:;">'
 					+ ' <i class="layui-icon">&#xe640;</i>'
 					+ ' </a>'
 					+ ' </td> </tr>';
@@ -335,28 +336,6 @@
 			});
 			$("tbody").html(html);
 		}
-		
-		Date.prototype.format = function(format) {  
-			var args = {
-				"M+": this.getMonth() + 1,
-	              "d+": this.getDate(),
-	              "h+": this.getHours(),
-	              "m+": this.getMinutes(),
-	              "s+": this.getSeconds(),
-	              "q+": Math.floor((this.getMonth() + 3) / 3),
-	              "S": this.getMilliseconds()
-			};          
-			if(/(y+)/.test(format)){
-				format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-			}
-			for(var i in args) {
-				var n = args[i];
-				if(new RegExp("(" + i + ")").test(format)){
-					format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));
-				}
-			}   
-			return format;
-		};
 		
 	</script>
 

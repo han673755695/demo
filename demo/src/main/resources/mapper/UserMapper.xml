@@ -42,10 +42,10 @@
 			and name like concat('%',#{username},'%')
 		</if>
 		<if test="start != null and start != '' ">
-			and <![CDATA[ create_date >= #{start} ]]>
+			and <![CDATA[ DATE_FORMAT(create_date,'%Y-%m-%d') >= DATE_FORMAT(#{start},'%Y-%m-%d') ]]>
 		</if>
 		<if test="end != null and end != '' ">
-			or <![CDATA[ create_date <= #{end} ]]>
+			and <![CDATA[ DATE_FORMAT(create_date,'%Y-%m-%d') <= DATE_FORMAT(#{end},'%Y-%m-%d') ]]>
 		</if>
 	</select>
 	
