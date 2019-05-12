@@ -91,4 +91,14 @@ public class UserServiceImpl implements IUserService {
 		return 0;
 	}
 
+	@Override
+	public int totalCount(Map<String, Object> params) {
+		try {
+			return userDao.totalCount(params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
 }

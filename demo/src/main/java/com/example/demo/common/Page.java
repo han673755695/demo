@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.StringUtils;
 
-
 /**
  * 分页对象
+ * 
  * @author my
  *
  */
@@ -23,6 +23,8 @@ public class Page {
 	private Integer pageCount;
 	// 总条目数
 	private Integer totalCount;
+	// 起始位置
+	private Integer current;
 
 	public Page() {
 
@@ -31,6 +33,15 @@ public class Page {
 	public Page(int currentPage, int pageSize) {
 		this.currentPage = currentPage;
 		this.pageSize = pageSize;
+		this.current = (currentPage -1) * pageSize;
+	}
+
+	public Integer getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(Integer current) {
+		this.current = current;
 	}
 
 	public int getCurrentPage() {
@@ -80,6 +91,7 @@ public class Page {
 		if (StringUtils.isEmpty(_pageSize)) {
 			_pageSize = DEFAULT_PAGESIZE;
 		}
+		
 		Page page = new Page(Integer.parseInt(_currentPage), Integer.parseInt(_pageSize));
 		return page;
 	}
@@ -87,7 +99,7 @@ public class Page {
 	@Override
 	public String toString() {
 		return "Page [currentPage=" + currentPage + ", pageSize=" + pageSize + ", pageCount=" + pageCount
-				+ ", totalCount=" + totalCount + "]";
+				+ ", totalCount=" + totalCount + ", current=" + current + "]";
 	}
 
 }

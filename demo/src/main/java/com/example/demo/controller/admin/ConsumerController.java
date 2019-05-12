@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
 import com.example.demo.domain.User;
 import com.example.demo.service.IUserService;
@@ -62,12 +63,27 @@ public class ConsumerController {
 	@RequestMapping("/consumerList/json")
 	public ResultData consumerListJson(Model model, HttpServletRequest request, User user) {
 		ResultData success = ResultData.getSuccess();
+		Page page = Page.getPage(request);
 		try {
 			Map<String,Object> parameterMap = RequestParamUtils.getParameterMap(request);
-
+			String dataSelect = (String) parameterMap.get("dataSelect");
+			if (!StringUtils.isEmpty(dataSelect)) {
+				String[] split = dataSelect.split("~");
+				parameterMap.put("start", split[0]);
+				parameterMap.put("end", split[1]);
+			}
+			
+			parameterMap.put("currentNum", page.getCurrent());
+			parameterMap.put("pageSize", page.getPageSize());
+			
 			List<Map<String, Object>> userList = userService.selectBySelective(parameterMap);
+			int totalCount = userService.totalCount(parameterMap);
+			page.setTotalCount(totalCount);
+			
 			success.setData(userList);
+			success.setPage(page);
 			success.setQueryParams(parameterMap);
+			logger.info("page: " + page.toString());
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());

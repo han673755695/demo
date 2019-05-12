@@ -193,6 +193,15 @@
 		  ,value: tab_list[id]
 		});
 	};
+	/**
+	 * [del_other_data 删除其它]
+	 * @param  {[type]} id [description]
+	 * @return {[type]}    [description]
+	 */
+	Xadmin.prototype.md5 = function (url){
+		var id = md5(url);
+		return id;
+	}
 	win.xadmin = new Xadmin();
 	
 }(window);

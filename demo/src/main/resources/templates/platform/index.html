@@ -70,7 +70,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('会员列表','${base}/admin/consumer/consumerList')">
+                                <a onclick="xadmin.add_tab('会员列表','${base}/admin/consumer/consumerList?currentPage=1&pageSize=15')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>会员列表(静态表格)</cite>
                                 </a>
@@ -317,7 +317,7 @@
         <!-- 右侧主体开始 -->
         <div class="page-content">
             <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
-                <ul class="layui-tab-title">
+                <ul id="tabUl" class="layui-tab-title">
                     <li class="home">
                         <i class="layui-icon">&#xe68e;</i>我的桌面</li></ul>
                 <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
@@ -326,7 +326,7 @@
                         <dd data-type="other">关闭其它</dd>
                         <dd data-type="all">关闭全部</dd></dl>
                 </div>
-                <div class="layui-tab-content">
+                <div class="layui-tab-content" id="iframe">
                     <div class="layui-tab-item layui-show">
                         <iframe src='${base}/admin/index/toWelcome' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
                     </div>

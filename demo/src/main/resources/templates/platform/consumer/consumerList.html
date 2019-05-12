@@ -14,7 +14,9 @@
             </a>
           </span>
 			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
-				<i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+				<i class="layui-icon layui-icon-refresh" style="line-height:30px">
+				</i>
+			</a>
 		</div>
 		<div class="layui-fluid">
 			<div class="layui-row layui-col-space15">
@@ -24,10 +26,13 @@
 							<form class="layui-form layui-col-space5">
 								<div class="layui-inline layui-show-xs-block">
 									<input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+									<input type="hidden" name="totalCount" value="${(resultdata.page.totalCount)!0}"/>
+									<input type="hidden" name="currentPage" value="${(resultdata.page.currentPage)!0}"/>
+									<input type="hidden" name="pageSize" value="${(resultdata.page.pageSize)!0}"/>
 								</div>
-								<div class="layui-inline layui-show-xs-block">
+								<!-- <div class="layui-inline layui-show-xs-block">
 									<input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
-								</div>
+								</div> -->
 								<div class="layui-inline layui-show-xs-block">
 									<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 								</div>
@@ -109,16 +114,7 @@
 							</table>
 						</div>
 						<div class="layui-card-body ">
-							<div class="page">
-								<div>
-									<a class="prev" href="">&lt;&lt;</a>
-									<a class="num" href="">1</a>
-									<span class="current">2</span>
-									<a class="num" href="">3</a>
-									<a class="num" href="">489</a>
-									<a class="next" href="">&gt;&gt;</a>
-								</div>
-							</div>
+							<div class="page" id="page"></div>
 						</div>
 					</div>
 				</div>
@@ -126,6 +122,7 @@
 		</div>
 	</body>
 	<script>
+		
 		layui.use(['laydate', 'form'], function() {
 			var laydate = layui.laydate;
 			var form = layui.form;
@@ -144,15 +141,11 @@
 			//执行一个laydate实例
 			laydate.render({
 				elem: '#start', //指定元素
-				value: new Date()
+				type: 'date',
+				format: 'yyyy-MM-dd',
+				max: new Date().format("yyyy-MM-dd"),
+				range: '~'
 			});
-
-			//执行一个laydate实例
-			laydate.render({
-				elem: '#end', //指定元素
-				value: new Date()
-			});
-
 		});
 
 		/*用户-停用*/
@@ -258,7 +251,10 @@
 		
 		
 		$(".search").click(function(){
-			searchAjax();
+			var dataJson = getData();
+			dataJson.currentPage=1;
+	    	dataJson.pageSize=1;
+			searchAjax(dataJson);
 		});
 		
 		function getData(){
@@ -266,12 +262,12 @@
 			var end = $("#end").val();
 			var username = $("input[name='username']").val();
 			
-			var data = {'start':start,'end':end,'username':username}
+			var data = {'dataSelect':start,'username':username}
 			return data;
 		}
 		
-		function searchAjax(){
-			var dataJson = getData();
+		/* 搜索ajax方法 */
+		function searchAjax(dataJson){
 			$.ajax({
 				type: "POST", //GET或POST,
 				async:true, //默认设置为true，所有请求均为异步请求。
@@ -281,9 +277,14 @@
 				success: function(dataResult) {
 					console.log(dataResult.status)
 					if(dataResult && dataResult.status == 'success'){
-						//$(obj).parents("tr").remove();
 						$("tbody").html('');
+						//重新赋值总数量和每页条目数
+						$("input[name='totalCount']").val(dataResult.page.totalCount);
+						$("input[name='pageSize']").val(dataResult.page.pageSize);
+						//拼接html
 						append(dataResult.data);
+						//分页重新初始化
+						pageFunction(dataResult.page.totalCount,dataResult.page.pageSize);
 						
 					}else{
 						layer.alert('操作失败', {icon: 5});
@@ -295,6 +296,7 @@
 			});
 		}
 		
+		/* 拼接html数据方法 */
 		function append(data){
 			var html = '';
 			$.each(data,function(index,user){
@@ -336,7 +338,13 @@
 			});
 			$("tbody").html(html);
 		}
-		
+	</script>
+	
+	<script>
+		var totalCount = $("input[name='totalCount']").val();
+		var pageSize = $("input[name='pageSize']").val();
+		//分页方法
+		pageFunction(totalCount,pageSize);
 	</script>
 
 </html>

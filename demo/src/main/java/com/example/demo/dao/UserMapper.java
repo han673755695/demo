@@ -19,4 +19,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User user);
 
     int updateByPrimaryKey(User user);
+    
+    int totalCount(Map<String,Object> params);
 }
