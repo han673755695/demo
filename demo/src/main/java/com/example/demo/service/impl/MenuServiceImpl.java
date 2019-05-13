@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,9 @@ public class MenuServiceImpl implements IMenuService {
 	private MenuMapper menuMapper;
 
 	@Override
-	public List<Menu> selectListByMenu(Menu enu) {
+	public List<Menu> selectListByMenu(Map<String, Object> params) {
 		try {
-			return menuMapper.selectListByMenu(enu);
+			return menuMapper.selectListByMenu(params);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("获取数据失败");
@@ -26,10 +27,10 @@ public class MenuServiceImpl implements IMenuService {
 	}
 
 	@Override
-	public int deleteByPrimaryKey(String id) {
+	public int deleteByPrimaryKey(List ids) {
 		try {
 
-			return menuMapper.deleteByPrimaryKey(id);
+			return menuMapper.deleteByPrimaryKey(ids);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("删除数据失败");
@@ -84,6 +85,17 @@ public class MenuServiceImpl implements IMenuService {
 		try {
 
 			return menuMapper.updateByMenu(menu);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("修改数据失败");
+		}
+	}
+
+	@Override
+	public int totalCount(Map<String, Object> params) {
+		try {
+
+			return menuMapper.totalCount(params);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("修改数据失败");

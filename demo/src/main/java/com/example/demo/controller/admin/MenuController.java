@@ -1,5 +1,6 @@
 package com.example.demo.controller.admin;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
+import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
 import com.example.demo.common.TableResultData;
 import com.example.demo.domain.Menu;
+import com.example.demo.domain.User;
 import com.example.demo.service.IMenuService;
 import com.example.demo.service.IUserService;
+import com.example.demo.utils.RequestParamUtils;
 import com.example.demo.utils.UUIDUtils;
 
 /**
@@ -61,12 +65,29 @@ public class MenuController {
 	@ResponseBody
 	public ResultData menuListJson(Model model, HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
+		Page page = Page.getPage(request);
+		
 		try {
 			logger.info("获取菜单list");
-			Menu menu = new Menu();
-			menu.setId("123456");
-			List<Menu> list = menuService.selectListByMenu(menu);
+			Map<String,Object> parameterMap = RequestParamUtils.getParameterMap(request);
+			String dataSelect = (String) parameterMap.get("dataSelect");
+			if (!StringUtils.isEmpty(dataSelect)) {
+				String[] split = dataSelect.split("~");
+				parameterMap.put("start", split[0]);
+				parameterMap.put("end", split[1]);
+			}
+			
+			
+			parameterMap.put("currentNum", page.getCurrent());
+			parameterMap.put("pageSize", page.getPageSize());
+			
+			List<Menu> list = menuService.selectListByMenu(parameterMap);
+			int totalCount = menuService.totalCount(parameterMap);
+			page.setTotalCount(totalCount);
+			
 			success.setData(list);
+			success.setPage(page);
+			success.setQueryParams(parameterMap);
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());
@@ -117,5 +138,74 @@ public class MenuController {
 		}
 		return success;
 	}
+	
+	@RequestMapping("/delMenu")
+	@ResponseBody
+	public ResultData delMenu(Model model, HttpServletRequest request, String ids) {
+		ResultData success = ResultData.getSuccess();
+		try {
+			//删除菜单
+			logger.info("进入删除菜单");
+			if (StringUtils.isEmpty(ids)) {
+				success.setStatus(ResultData.ERROR);
+				success.setMessage("ids不能为空");
+				return success;
+			}
+			String[] split = ids.split(",");
+			List<String> asList = Arrays.asList(split);
+			menuService.deleteByPrimaryKey(asList);
+		} catch (Exception e) {
+			success.setStatus(ResultData.ERROR);
+			success.setMessage(e.getMessage());
+			e.printStackTrace();
+		}
+		return success;
+	}
+	
+	
+	/**
+	 * 跳到页面编辑
+	 * 
+	 * @param model
+	 * @param request
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("/menuEdit")
+	public String menuEdit(Model model, HttpServletRequest request, User user) {
+		logger.info("进入编辑用户页面");
+		ResultData consumerListJson = menuEditJson(model, request, user);
+		model.addAttribute(ResultData.DATAKEY, consumerListJson.getData());
+		return "/platform/menu/menuAdd";
+	}
+
+	/**
+	 * 编辑返回json
+	 * 
+	 * @param model
+	 * @param request
+	 * @param user
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/menuEdit/json")
+	public ResultData menuEditJson(Model model, HttpServletRequest request, User user) {
+		ResultData success = ResultData.getSuccess();
+		try {
+			String id = user.getId();
+			if (StringUtils.isEmpty(id)) {
+				success.setStatus(ResultData.ERROR);
+				return success;
+			}
+			Menu result = menuService.selectByPrimaryKey(id);
+			success.setData(result);
+		} catch (Exception e) {
+			success.setStatus(ResultData.ERROR);
+			success.setMessage(e.getMessage());
+			e.printStackTrace();
+		}
+		return success;
+	}
+	
 	
 }

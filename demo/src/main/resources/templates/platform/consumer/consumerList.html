@@ -30,9 +30,6 @@
 									<input type="hidden" name="currentPage" value="${(resultdata.page.currentPage)!0}"/>
 									<input type="hidden" name="pageSize" value="${(resultdata.page.pageSize)!0}"/>
 								</div>
-								<!-- <div class="layui-inline layui-show-xs-block">
-									<input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
-								</div> -->
 								<div class="layui-inline layui-show-xs-block">
 									<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 								</div>
@@ -188,7 +185,6 @@
 					data: {ids:id},
 					dataType: "json", //xml、html、script、jsonp、text
 					success: function(dataResult) {
-						console.log(dataResult.status)
 						if(dataResult && dataResult.status == 'success'){
 							$(obj).parents("tr").remove();
 							layer.msg('已删除!', {
@@ -222,7 +218,7 @@
 				return;
 			}
 
-			layer.confirm('确认要删除吗？' + ids.toString(), function(index) {
+			layer.confirm('确认要删除吗？', function(index) {
 				//捉到所有被选中的，发异步进行删除
 				
 				$.ajax({
@@ -232,7 +228,6 @@
 					data: {ids:ids.toString()},
 					dataType: "json", //xml、html、script、jsonp、text
 					success: function(dataResult) {
-						console.log(dataResult.status)
 						if(dataResult && dataResult.status == 'success'){
 							layer.msg('删除成功', {
 								icon: 1
@@ -259,7 +254,6 @@
 		
 		function getData(){
 			var start = $("#start").val();
-			var end = $("#end").val();
 			var username = $("input[name='username']").val();
 			
 			var data = {'dataSelect':start,'username':username}
@@ -275,7 +269,6 @@
 				data: dataJson,
 				dataType: "json", //xml、html、script、jsonp、text
 				success: function(dataResult) {
-					console.log(dataResult.status)
 					if(dataResult && dataResult.status == 'success'){
 						$("tbody").html('');
 						//重新赋值总数量和每页条目数
@@ -283,9 +276,10 @@
 						$("input[name='pageSize']").val(dataResult.page.pageSize);
 						//拼接html
 						append(dataResult.data);
-						//分页重新初始化
-						pageFunction(dataResult.page.totalCount,dataResult.page.pageSize);
-						
+						if(dataResult.page.currentPage == 1){
+							//分页重新初始化
+							pageFunction(dataResult.page.totalCount,dataResult.page.pageSize);
+						}
 					}else{
 						layer.alert('操作失败', {icon: 5});
 					}
