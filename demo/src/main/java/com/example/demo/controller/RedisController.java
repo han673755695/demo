@@ -15,7 +15,7 @@ import com.example.demo.common.ResultData;
 import com.example.demo.utils.RequestParamUtils;
 
 @Controller
-@RequestMapping("/testRedisController")
+@RequestMapping("/redisController")
 public class RedisController {
 
 	@Autowired

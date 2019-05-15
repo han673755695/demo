@@ -159,49 +159,49 @@
 	<update id="updateActiveByMenu" parameterType="map">
 		update admin_menu
 		<set>
-			<if test="record.id != null">
-				id = #{record.id,jdbcType=VARCHAR},
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=VARCHAR},
 			</if>
-			<if test="record.parentId != null">
-				parent_id = #{record.parentId,jdbcType=VARCHAR},
+			<if test="createDate != null">
+				create_date = #{createDate,jdbcType=TIMESTAMP},
 			</if>
-			<if test="record.createDate != null">
-				create_date = #{record.createDate,jdbcType=TIMESTAMP},
+			<if test="updateDate != null">
+				update_date = #{updateDate,jdbcType=TIMESTAMP},
 			</if>
-			<if test="record.updateDate != null">
-				update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
 			</if>
-			<if test="record.name != null">
-				name = #{record.name,jdbcType=VARCHAR},
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
 			</if>
-			<if test="record.status != null">
-				status = #{record.status,jdbcType=VARCHAR},
+			<if test="sort != null">
+				sort = #{sort,jdbcType=VARCHAR},
 			</if>
-			<if test="record.sort != null">
-				sort = #{record.sort,jdbcType=VARCHAR},
+			<if test="isParent != null">
+				is_parent = #{isParent,jdbcType=VARCHAR},
 			</if>
-			<if test="record.isParent != null">
-				is_parent = #{record.isParent,jdbcType=VARCHAR},
-			</if>
-			<if test="record.url != null">
-				url = #{record.url,jdbcType=VARCHAR},
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
 			</if>
 		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
 		
 	</update>
 	
 	<!-- 修改数据 -->
 	<update id="updateByMenu" parameterType="map">
 		update admin_menu
-		set id = #{record.id,jdbcType=VARCHAR},
-		parent_id = #{record.parentId,jdbcType=VARCHAR},
-		create_date = #{record.createDate,jdbcType=TIMESTAMP},
-		update_date = #{record.updateDate,jdbcType=TIMESTAMP},
-		name = #{record.name,jdbcType=VARCHAR},
-		status = #{record.status,jdbcType=VARCHAR},
-		sort = #{record.sort,jdbcType=VARCHAR},
-		is_parent = #{record.isParent,jdbcType=VARCHAR},
-		url = #{record.url,jdbcType=VARCHAR}
-		
+		set 
+		parent_id = #{parentId,jdbcType=VARCHAR},
+		create_date = #{createDate,jdbcType=TIMESTAMP},
+		update_date = #{updateDate,jdbcType=TIMESTAMP},
+		name = #{name,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		sort = #{sort,jdbcType=VARCHAR},
+		is_parent = #{isParent,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR}
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
 	</update>
 </mapper>

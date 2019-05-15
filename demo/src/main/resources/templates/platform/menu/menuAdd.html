@@ -12,13 +12,13 @@
 						<label for="name" class="layui-form-label">
                             <span class="x-red">*</span>菜单名称</label>
 						<div class="layui-input-inline">
-							<input type="text" id="name" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+							<input type="text" id="name" name="name" value="${(resultdata.name)!''}" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
 					</div>
 					<div class="layui-form-item">
 						<label for="url" class="layui-form-label">
                             <span id="span" class="x-red"></span>url地址</label>
 						<div class="layui-input-inline">
-							<input type="text" id="url" name="url" required="" lay-verify="" autocomplete="off" class="layui-input"></div>
+							<input type="text" id="url" name="url" value="${(resultdata.url)!''}" required="" lay-verify="" autocomplete="off" class="layui-input"></div>
 					</div>
 					
 					<div class="layui-inline">
@@ -33,22 +33,43 @@
 					<div class="layui-form-item">
 		                <label class="layui-form-label"><span class="x-red">*</span>是否是父菜单</label>
 		                <div class="layui-input-block">
-			                <input type="radio" name="isParent" value="1" lay-skin="primary" title="是" >
-			                <input type="radio" name="isParent" value="2" lay-skin="primary" title="否">
+		                	<#if (resultdata.isParent)?? && (resultdata.isParent) == '1'>
+		                		<input type="radio" name="isParent" value="1" lay-skin="primary" title="是" checked="checked">
+			                	<input type="radio" name="isParent" value="2" lay-skin="primary" title="否">
+		                	</#if>
+		                	<#if (resultdata.isParent)?? && (resultdata.isParent) == '2'>
+		                		<input type="radio" name="isParent" value="1" lay-skin="primary" title="是">
+			                	<input type="radio" name="isParent" value="2" lay-skin="primary" title="否" checked="checked">
+		                	</#if>
+		                	<#if !(resultdata.isParent)??>
+		                		<input type="radio" name="isParent" value="1" lay-skin="primary" title="是">
+			                	<input type="radio" name="isParent" value="2" lay-skin="primary" title="否">
+		                	</#if>
 		                </div>
 	                </div>
 					<div class="layui-form-item">
 		                <label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
 		                <div class="layui-input-block">
-			                <input type="radio" name="status" value="1" lay-skin="primary" title="是">
-			                <input type="radio" name="status" value="2" lay-skin="primary" title="否">
+		                	<#if (resultdata.status)?? && (resultdata.status) == '1'>
+		                		<input type="radio" name="status" value="1" lay-skin="primary" title="是" checked="checked">
+			                	<input type="radio" name="status" value="2" lay-skin="primary" title="否">
+		                	</#if>
+		                	<#if (resultdata.status)?? && (resultdata.status) == '2'>
+		                		<input type="radio" name="status" value="1" lay-skin="primary" title="是">
+			                	<input type="radio" name="status" value="2" lay-skin="primary" title="否" checked="checked">
+		                	</#if>
+		                	<#if !(resultdata.status)??>
+		                		<input type="radio" name="status" value="1" lay-skin="primary" title="是">
+			                	<input type="radio" name="status" value="2" lay-skin="primary" title="否">
+		                	</#if>
+			                
 		                </div>
 	                </div>
 					<div class="layui-form-item">
 						<label for="sort" class="layui-form-label">
                             <span class="x-red">*</span>排序</label>
 						<div class="layui-input-inline">
-							<input type="text" id="sort" name="sort" required="" lay-verify="number" autocomplete="off" class="layui-input"></div>
+							<input type="text" id="sort" value="${(resultdata.sort)!''}" name="sort" required="" lay-verify="number" autocomplete="off" class="layui-input"></div>
 					</div>
 					<div class="layui-form-item">
 						<label for="L_repass" class="layui-form-label"></label>
@@ -66,8 +87,6 @@
 					//监听提交
 					form.on('submit(add)',
 						function(dataJson) {
-							console.log(JSON.stringify(dataJson.field));
-							
 							$.ajax({
 								type: "POST", //GET或POST,
 								async:true, //默认设置为true，所有请求均为异步请求。
@@ -96,7 +115,9 @@
 				});
 		</script>
 		<script>
+			
 			initParentMenu();
+			
 			/* 初始化父菜单选项 */
 			function initParentMenu(){
 				$.ajax({
@@ -120,11 +141,22 @@
 			}
 			
 			function appendOption(data){
+				var selectId = "${(resultdata.parentId)!''}";
+				$("#parentId").html("");
 				var options = '<option value="">直接选择或搜索选择</option>';
+				$("#parentId").append(options);
 				$.each(data, function(index,menu){
-					options += '<option value="' + menu.id + '">' + menu.name + '</option>';
+					if(selectId == menu.id){
+						$("#parentId").append('<option selected="selected" value="' + menu.id + '">' + menu.name + '</option>');
+					}else{
+						$("#parentId").append('<option value="' + menu.id + '">' + menu.name + '</option>');
+					}
 				});
-				$("#parentId").html(options);
+				//ajax动态加载数据后,需要重新渲染form表单
+				layui.use('form', function(){
+				   var form = layui.form;
+				   form.render();
+				});
 			}
 			
 			/* $("#no").click(function(){

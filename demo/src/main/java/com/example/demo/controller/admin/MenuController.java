@@ -117,20 +117,28 @@ public class MenuController {
 		ResultData success = ResultData.getSuccess();
 		try {
 			logger.info("保存菜单");
-			menu.setId(UUIDUtils.getUUID());
-			if (StringUtils.isEmpty(menu.getParentId())) {
-				menu.setParentId("-1");
+			String id = menu.getId();
+			if (StringUtils.isEmpty(id)) {
+				//保存
+				menu.setId(UUIDUtils.getUUID());
+				if (StringUtils.isEmpty(menu.getParentId())) {
+					menu.setParentId("-1");
+				}else {
+					Menu parentMenu = menuService.selectByPrimaryKey(menu.getParentId());
+					parentMenu.setIsParent("1");
+					menuService.updateActiveByMenu(parentMenu);
+				}
+				menu.setCreateDate(new Date());
+				menu.setUpdateDate(new Date());
+				logger.info(menu.toString());
+				int insertActive = menuService.insertActive(menu);
+				logger.info(String.valueOf(insertActive));
+				success.setData(insertActive);
 			}else {
-				Menu parentMenu = menuService.selectByPrimaryKey(menu.getParentId());
-				parentMenu.setIsParent("2");
-				menuService.updateActiveByMenu(parentMenu);
+				//修改
+				menuService.updateActiveByMenu(menu);
 			}
-			menu.setCreateDate(new Date());
-			menu.setUpdateDate(new Date());
-			logger.info(menu.toString());
-			int insertActive = menuService.insertActive(menu);
-			logger.info(String.valueOf(insertActive));
-			success.setData(insertActive);
+			
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());
@@ -172,9 +180,9 @@ public class MenuController {
 	 * @return
 	 */
 	@RequestMapping("/menuEdit")
-	public String menuEdit(Model model, HttpServletRequest request, User user) {
+	public String menuEdit(Model model, HttpServletRequest request, Menu menu) {
 		logger.info("进入编辑用户页面");
-		ResultData consumerListJson = menuEditJson(model, request, user);
+		ResultData consumerListJson = menuEditJson(model, request, menu);
 		model.addAttribute(ResultData.DATAKEY, consumerListJson.getData());
 		return "/platform/menu/menuAdd";
 	}
@@ -189,10 +197,10 @@ public class MenuController {
 	 */
 	@ResponseBody
 	@RequestMapping("/menuEdit/json")
-	public ResultData menuEditJson(Model model, HttpServletRequest request, User user) {
+	public ResultData menuEditJson(Model model, HttpServletRequest request, Menu menu) {
 		ResultData success = ResultData.getSuccess();
 		try {
-			String id = user.getId();
+			String id = menu.getId();
 			if (StringUtils.isEmpty(id)) {
 				success.setStatus(ResultData.ERROR);
 				return success;
