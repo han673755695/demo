@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 public class Page {
 
 	private static String DEFAULT_CURRENTPAGE = "1";
-	private static String DEFAULT_PAGESIZE = "1";
+	private static String DEFAULT_PAGESIZE = "15";
 
 	// 当前页
 	private int currentPage = 1;
