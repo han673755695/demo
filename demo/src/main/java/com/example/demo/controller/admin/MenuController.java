@@ -18,11 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.druid.util.StringUtils;
 import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
-import com.example.demo.common.TableResultData;
 import com.example.demo.domain.Menu;
-import com.example.demo.domain.User;
 import com.example.demo.service.IMenuService;
-import com.example.demo.service.IUserService;
 import com.example.demo.utils.RequestParamUtils;
 import com.example.demo.utils.UUIDUtils;
 
@@ -80,6 +77,7 @@ public class MenuController {
 			
 			parameterMap.put("currentNum", page.getCurrent());
 			parameterMap.put("pageSize", page.getPageSize());
+			parameterMap.put("isPage", page.getIsPage());
 			
 			List<Menu> list = menuService.selectListByMenu(parameterMap);
 			int totalCount = menuService.totalCount(parameterMap);

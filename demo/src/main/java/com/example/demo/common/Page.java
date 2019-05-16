@@ -25,15 +25,26 @@ public class Page {
 	private Integer totalCount;
 	// 起始位置
 	private Integer current;
+	// 是否分页,默认分页
+	private String isPage = "true";
 
 	public Page() {
 
 	}
 
-	public Page(int currentPage, int pageSize) {
+	public Page(int currentPage, int pageSize, String isPage) {
 		this.currentPage = currentPage;
 		this.pageSize = pageSize;
-		this.current = (currentPage -1) * pageSize;
+		this.isPage = isPage;
+		this.current = (currentPage - 1) * pageSize;
+	}
+
+	public String getIsPage() {
+		return isPage;
+	}
+
+	public void setIsPage(String isPage) {
+		this.isPage = isPage;
 	}
 
 	public Integer getCurrent() {
@@ -85,21 +96,25 @@ public class Page {
 	public static Page getPage(HttpServletRequest request) {
 		String _currentPage = request.getParameter("currentPage");
 		String _pageSize = request.getParameter("pageSize");
+		String _isPage = request.getParameter("isPage");
 		if (StringUtils.isEmpty(_currentPage)) {
 			_currentPage = DEFAULT_CURRENTPAGE;
 		}
 		if (StringUtils.isEmpty(_pageSize)) {
 			_pageSize = DEFAULT_PAGESIZE;
 		}
-		
-		Page page = new Page(Integer.parseInt(_currentPage), Integer.parseInt(_pageSize));
+		if (!StringUtils.isEmpty(_isPage)) {
+			_isPage = DEFAULT_PAGESIZE;
+		}
+
+		Page page = new Page(Integer.parseInt(_currentPage), Integer.parseInt(_pageSize), _isPage);
 		return page;
 	}
 
 	@Override
 	public String toString() {
 		return "Page [currentPage=" + currentPage + ", pageSize=" + pageSize + ", pageCount=" + pageCount
-				+ ", totalCount=" + totalCount + ", current=" + current + "]";
+				+ ", totalCount=" + totalCount + ", current=" + current + ", isPage=" + isPage + "]";
 	}
 
 }

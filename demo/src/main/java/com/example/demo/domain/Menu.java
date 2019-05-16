@@ -1,102 +1,124 @@
 package com.example.demo.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Menu {
-    private String id;
+public class Menu implements Serializable{
+	private String id;
 
-    private String parentId;
+	private String parentId;
 
-    private Date createDate;
+	private Date createDate;
 
-    private Date updateDate;
+	private Date updateDate;
 
-    private String name;
+	private String name;
 
-    private String status;
+	private String status;
 
-    private String sort;
+	private String sort;
 
-    private String isParent;
+	private String isParent;
 
-    private String url;
+	private String url;
 
-    public String getId() {
-        return id;
-    }
+	private String level;
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+	private String icon;
 
-    public String getParentId() {
-        return parentId;
-    }
+	public String getIcon() {
+		return icon;
+	}
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId == null ? null : parentId.trim();
-    }
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 
-    public Date getCreateDate() {
-        return createDate;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public void setId(String id) {
+		this.id = id == null ? null : id.trim();
+	}
 
-    public Date getUpdateDate() {
-        return updateDate;
-    }
+	public String getLevel() {
+		return level;
+	}
 
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
+	public void setLevel(String level) {
+		this.level = level;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getParentId() {
+		return parentId;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public void setParentId(String parentId) {
+		this.parentId = parentId == null ? null : parentId.trim();
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public Date getCreateDate() {
+		return createDate;
+	}
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public String getSort() {
-        return sort;
-    }
+	public Date getUpdateDate() {
+		return updateDate;
+	}
 
-    public void setSort(String sort) {
-        this.sort = sort == null ? null : sort.trim();
-    }
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
 
-    public String getIsParent() {
-        return isParent;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setIsParent(String isParent) {
-        this.isParent = isParent == null ? null : isParent.trim();
-    }
+	public void setName(String name) {
+		this.name = name == null ? null : name.trim();
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort == null ? null : sort.trim();
+	}
+
+	public String getIsParent() {
+		return isParent;
+	}
+
+	public void setIsParent(String isParent) {
+		this.isParent = isParent == null ? null : isParent.trim();
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url == null ? null : url.trim();
+	}
 
 	@Override
 	public String toString() {
 		return "Menu [id=" + id + ", parentId=" + parentId + ", createDate=" + createDate + ", updateDate=" + updateDate
 				+ ", name=" + name + ", status=" + status + ", sort=" + sort + ", isParent=" + isParent + ", url=" + url
-				+ "]";
+				+ ", level=" + level + ", icon=" + icon + "]";
 	}
+
 }
