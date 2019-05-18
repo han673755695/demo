@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,27 +26,31 @@ import com.example.demo.utils.RequestParamUtils;
 public class FreemarkerController {
 
 	private final Logger logger = LoggerFactory.getLogger(FreemarkerController.class);
-	
+	private String COUPON_KEY = "coupon";
+
 	@Autowired
 	private IUserService userService;
-	
+	@Autowired
+	RedisTemplate redisTemplate;
+
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
-		
+
 		return "/platform/index";
 	}
-	
+
 	@ResponseBody
-	@RequestMapping("/two")
+	@RequestMapping("/test")
 	public ResultData two(Model model, HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
-		Page page = Page.getPage(request);
-		Map parameterMap = RequestParamUtils.getParameterMap(request);
-		List<Map<String, Object>> userList = userService.selectBySelective(parameterMap);
-		success.setData(userList);
-		success.setPage(page);
-		System.out.println("123");
+		
+		for (int j = 0; j < 100; j++) {
+			String format = String.format("abc%s", j);
+			System.out.println("format: " + format);
+		}
+//		redisTemplate.opsForSet().add(COUPON_KEY, String.format("abc%s", i));
+//		redisTemplate.opsForSet().add(COUPON_KEY, String.format("abc%s", i));
 		return success;
 	}
-	
+
 }

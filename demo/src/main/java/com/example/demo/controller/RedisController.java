@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.common.ResultData;
+import com.example.demo.utils.RedisUtils;
 import com.example.demo.utils.RequestParamUtils;
 
 @Controller
@@ -26,12 +27,9 @@ public class RedisController {
 	public ResultData getData(HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
 		try {
-			Map<String,String> parameterMap = RequestParamUtils.getParameterMap(request);
-			Set<String> keySet = parameterMap.keySet();
-			for (String key : keySet) {
-				stringRedisTemplate.opsForValue().set(key, parameterMap.get(key));
-			}
-			
+			RedisUtils.setString("test", "ok");
+			String string = RedisUtils.getString("test");
+			System.out.println(string);
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			e.printStackTrace();
