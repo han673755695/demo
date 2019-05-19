@@ -9,19 +9,31 @@ import java.io.ObjectOutputStream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.eunm.RedisKeyEnum;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * redis相关的配置类
+ * @author my
+ *
+ */
 @Component
-public class RedisSerializerConfig implements RedisSerializer<Object> {
+public class RedisConfig implements RedisSerializer<Object> {
 
+	/**
+	 * redis自定义序列化
+	 */
 	@Override
 	public byte[] serialize(Object o) throws SerializationException {
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -35,6 +47,9 @@ public class RedisSerializerConfig implements RedisSerializer<Object> {
 		return byteOut.toByteArray();
 	}
 
+	/**
+	 * redis自定义反序列化
+	 */
 	@Override
 	public Object deserialize(byte[] bytes) throws SerializationException {
 		if (bytes == null)
@@ -52,6 +67,12 @@ public class RedisSerializerConfig implements RedisSerializer<Object> {
 		return obj;
 	}
 
+	
+	/**
+	 * 解决redis存储的key不可阅读问题
+	 * @param redisConnectionFactory
+	 * @return
+	 */
 	@Bean
 	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		// 1.创建 redisTemplate 模版
@@ -74,5 +95,41 @@ public class RedisSerializerConfig implements RedisSerializer<Object> {
 		template.afterPropertiesSet();
 		return template;
 	}
+	
+	
+	/**
+	 * redis消息监听器容器 可以添加多个监听不同话题的redis监听器<br>
+	 * 只需要把消息监听器和相应的消息订阅处理器绑定，该消息监听器<br>
+	 * 通过反射技术调用消息订阅处理器的相关方法进行一些业务处理<br>
+	 * 
+	 * @param connectionFactory
+	 * @param listenerAdapter
+	 * @return
+	 */
+	@Bean
+	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+			MessageListenerAdapter listenerAdapter) {
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+
+		// 可以添加多个 messageListener
+		container.addMessageListener(listenerAdapter, new PatternTopic(RedisKeyEnum.MESSAGEPUSH_A.getValue()));
+		container.addMessageListener(listenerAdapter, new PatternTopic(RedisKeyEnum.MESSAGEPUSH_B.getValue()));
+		container.addMessageListener(listenerAdapter, new PatternTopic(RedisKeyEnum.MESSAGEPUSH_C.getValue()));
+
+		return container;
+	}
+
+	/**
+	 * 消息监听器适配器，绑定消息处理器，利用策略模式来处理消息
+	 * 
+	 * @param redisReceiver
+	 * @return
+	 */
+	@Bean
+	MessageListenerAdapter listenerAdapter(RedisReceiver redisReceiver) {
+		return new MessageListenerAdapter(redisReceiver);
+	}
+	
 
 }
