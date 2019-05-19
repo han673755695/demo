@@ -25,7 +25,7 @@ import com.example.demo.utils.RequestParamUtils;
 @RequestMapping("/freemarker")
 public class FreemarkerController {
 
-	private final Logger logger = LoggerFactory.getLogger(FreemarkerController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FreemarkerController.class);
 	private String COUPON_KEY = "coupon";
 
 	@Autowired

@@ -19,7 +19,9 @@ import com.alibaba.druid.util.StringUtils;
 import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
 import com.example.demo.domain.Menu;
+import com.example.demo.eunm.RedisKeyEnum;
 import com.example.demo.service.IMenuService;
+import com.example.demo.utils.RedisUtils;
 import com.example.demo.utils.RequestParamUtils;
 import com.example.demo.utils.UUIDUtils;
 
@@ -35,7 +37,7 @@ public class MenuController {
 	@Autowired
 	private IMenuService menuService;
 	
-	private final Logger logger = LoggerFactory.getLogger(MenuController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
 	/**
 	  * 菜单列表返回页面
@@ -136,7 +138,8 @@ public class MenuController {
 				//修改
 				menuService.updateActiveByMenu(menu);
 			}
-			
+			RedisUtils.deleteKey(RedisKeyEnum.MENUKEY.getValue());
+			logger.info("更新redis中菜单信息");
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());

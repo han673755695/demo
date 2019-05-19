@@ -36,7 +36,7 @@ import com.example.demo.utils.UUIDUtils;
 @RequestMapping("/admin/consumer")
 public class ConsumerController {
 
-	private final Logger logger = LoggerFactory.getLogger(ConsumerController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConsumerController.class);
 
 	@Autowired
 	private IUserService userService;

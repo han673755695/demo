@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.druid.util.StringUtils;
 import com.example.demo.common.ResultData;
 import com.example.demo.domain.Menu;
+import com.example.demo.eunm.RedisKeyEnum;
 import com.example.demo.service.IMenuService;
+import com.example.demo.utils.RedisUtils;
 import com.example.demo.utils.RequestParamUtils;
 
 
@@ -31,12 +33,10 @@ import com.example.demo.utils.RequestParamUtils;
 @RequestMapping("/admin/index")
 public class IndexController {
 
-	private final Logger logger = LoggerFactory.getLogger(IndexController.class);
+	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 	
 	@Autowired
 	private IMenuService menuService;
-	@Autowired
-	RedisTemplate redisTemplate;
 	
 	/**
 	 * 进入首页
@@ -51,89 +51,101 @@ public class IndexController {
 		try {
 			
 			String menuDiv = "";
-			if (redisTemplate.hasKey("menuDiv")) {
-				menuDiv = (String) redisTemplate.opsForValue().get("menuDiv");
+			
+			if (RedisUtils.hasKey(RedisKeyEnum.MENUKEY.getValue())) {
+				menuDiv = RedisUtils.getString(RedisKeyEnum.MENUKEY.getValue());
 				if (!StringUtils.isEmpty(menuDiv)) {
 					model.addAttribute("div", menuDiv);
 					return "/platform/index";
 				}
 			}
-			
-			//一级菜单
-			parameterMap.put("parentId", "-1");
-			parameterMap.put("sort", "sort");
-			List<Menu> firstList = menuService.selectListByMenu(parameterMap);
-			//二级菜单
-			parameterMap.remove("parentId");
-			parameterMap.put("level", "2");
-			List<Menu> secondList = menuService.selectListByMenu(parameterMap);
-			//三级菜单
-			parameterMap.put("level", "3");
-			List<Menu> threeList = menuService.selectListByMenu(parameterMap);
-			
-			
-			StringBuffer first = new StringBuffer();
-			//一级菜单
-			for (Menu menu : firstList) {
-				first.append("<li>")
-				.append("<a href=\"javascript:;\">")
-				.append("<i class=\"iconfont left-nav-li\" lay-tips=\"").append(menu.getName()).append("\">")
-				.append(menu.getIcon()).append("</i>")
-				.append("<cite>").append(menu.getName()).append("</cite>")
-				.append("<i class=\"iconfont nav_right\">&#xe697;</i>")
-				.append("</a>")
-				.append("<ul class=\"sub-menu\">");
-				
-				for (Menu secondMenu : secondList) {
-					//二级菜单
-					if (secondMenu.getParentId().equals(menu.getId())) {
-						
-						if ("2".equals(secondMenu.getIsParent())) {
-							first.append("<li>")
-							.append("<a onclick=\"xadmin.add_tab(\'")
-								.append(secondMenu.getName()).append("\',\'")
-								.append(request.getContextPath()).append(secondMenu.getUrl()).append("\')\">")
-							.append("<i class=\"iconfont\">&#xe6a7;</i>")
-							.append("<cite>").append(secondMenu.getName()).append("</cite>")
-							.append("</a>")
-						    .append("</li>");
-						}else {
-							//三级菜单
-							first.append("<li>")
-							.append("<a href=\"javascript:;\">")
-							.append("<i class=\"iconfont\">&#xe70b;</i>")
-							.append("<cite>").append(secondMenu.getName()).append("</cite>")
-							.append("<i class=\"iconfont nav_right\">&#xe697;</i>")
-							.append("</a>")
-							.append("<ul class=\"sub-menu\">");
-							
-							for (Menu threeMenu : threeList) {
-								first.append("<li>")
-								.append("<a onclick=\"xadmin.add_tab(\'")
-								.append(threeMenu.getName()).append("\',\'")
-								.append(request.getContextPath()).append(threeMenu.getUrl()).append("\')\">")
-								.append("<i class=\"iconfont\">&#xe6a7;</i>")
-								.append("<cite>").append(threeMenu.getName()).append("</cite>")
-								.append("</a>")
-								.append("</li>");
-							}
-							first.append("</ul>")
-								.append("</li>");
-						}
-					}
-				}
-			    first.append("</ul>")
-			    .append("</li>");
-			}
+			//获取菜单
+			StringBuffer first = queryMenu(request.getContextPath(), parameterMap);
 			
 			model.addAttribute("div", first.toString());
-			redisTemplate.opsForValue().set("menuDiv", first.toString());
+			RedisUtils.setString(RedisKeyEnum.MENUKEY.getValue(), first.toString());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return "/platform/index";
+	}
+
+	/**
+	 * 从数据库中获取菜单
+	 * @param contextPath
+	 * @param parameterMap
+	 * @return
+	 */
+	private StringBuffer queryMenu(String contextPath, Map<String, Object> parameterMap) {
+		//一级菜单
+		parameterMap.put("parentId", "-1");
+		parameterMap.put("sort", "sort");
+		List<Menu> firstList = menuService.selectListByMenu(parameterMap);
+		//二级菜单
+		parameterMap.remove("parentId");
+		parameterMap.put("level", "2");
+		List<Menu> secondList = menuService.selectListByMenu(parameterMap);
+		//三级菜单
+		parameterMap.put("level", "3");
+		List<Menu> threeList = menuService.selectListByMenu(parameterMap);
+		
+		
+		StringBuffer first = new StringBuffer();
+		//一级菜单
+		for (Menu menu : firstList) {
+			first.append("<li>")
+			.append("<a href=\"javascript:;\">")
+			.append("<i class=\"iconfont left-nav-li\" lay-tips=\"").append(menu.getName()).append("\">")
+			.append(menu.getIcon()).append("</i>")
+			.append("<cite>").append(menu.getName()).append("</cite>")
+			.append("<i class=\"iconfont nav_right\">&#xe697;</i>")
+			.append("</a>")
+			.append("<ul class=\"sub-menu\">");
+			
+			for (Menu secondMenu : secondList) {
+				//二级菜单
+				if (secondMenu.getParentId().equals(menu.getId())) {
+					
+					if ("2".equals(secondMenu.getIsParent())) {
+						first.append("<li>")
+						.append("<a onclick=\"xadmin.add_tab(\'")
+							.append(secondMenu.getName()).append("\',\'")
+							.append(contextPath).append(secondMenu.getUrl()).append("\')\">")
+						.append("<i class=\"iconfont\">&#xe6a7;</i>")
+						.append("<cite>").append(secondMenu.getName()).append("</cite>")
+						.append("</a>")
+					    .append("</li>");
+					}else {
+						//三级菜单
+						first.append("<li>")
+						.append("<a href=\"javascript:;\">")
+						.append("<i class=\"iconfont\">&#xe70b;</i>")
+						.append("<cite>").append(secondMenu.getName()).append("</cite>")
+						.append("<i class=\"iconfont nav_right\">&#xe697;</i>")
+						.append("</a>")
+						.append("<ul class=\"sub-menu\">");
+						
+						for (Menu threeMenu : threeList) {
+							first.append("<li>")
+							.append("<a onclick=\"xadmin.add_tab(\'")
+							.append(threeMenu.getName()).append("\',\'")
+							.append(contextPath).append(threeMenu.getUrl()).append("\')\">")
+							.append("<i class=\"iconfont\">&#xe6a7;</i>")
+							.append("<cite>").append(threeMenu.getName()).append("</cite>")
+							.append("</a>")
+							.append("</li>");
+						}
+						first.append("</ul>")
+							.append("</li>");
+					}
+				}
+			}
+		    first.append("</ul>")
+		    .append("</li>");
+		}
+		return first;
 	}
 	
 	/**

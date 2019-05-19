@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/statistics")
 public class StatisticsController {
 
-	private final Logger logger = LoggerFactory.getLogger(StatisticsController.class);
+	private static final Logger logger = LoggerFactory.getLogger(StatisticsController.class);
 	
 	/**
 	 * 统计页面

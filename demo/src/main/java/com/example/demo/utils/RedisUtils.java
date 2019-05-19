@@ -13,6 +13,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Component;
 
+
+/**
+ * 建议不使用工具类,使用原生的
+ * @author my
+ *
+ */
 @Component
 public class RedisUtils {
 
