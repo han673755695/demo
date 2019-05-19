@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.common.ResultData;
 import com.example.demo.eunm.RedisKeyEnum;
+import com.example.demo.utils.DateUtils;
 import com.example.demo.utils.RedisUtils;
 import com.example.demo.utils.UUIDUtils;
 
@@ -142,7 +143,10 @@ public class RedisController {
 	}
 	
 	
-	
+	/**
+	 * redis发布订阅模式
+	 * @return
+	 */
 	@RequestMapping("/messagepush")
 	@ResponseBody
 	public ResultData messagepush() {

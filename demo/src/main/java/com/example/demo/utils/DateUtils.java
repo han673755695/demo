@@ -8,6 +8,8 @@ public class DateUtils {
 
 	public final static String PATTERN_SHORT = "yyyy-MM-dd";
 	public final static String PATTERN_DEFAULT = "yyyy-MM-dd HH:mm:ss";
+	public final static String PATTERN_ORDER = "yyyyMMddHHmmss";
+	
 	
 	public DateUtils() {
 		
