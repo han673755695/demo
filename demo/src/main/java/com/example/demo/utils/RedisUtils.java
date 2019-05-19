@@ -39,7 +39,7 @@ public class RedisUtils {
 	 * @param timeout
 	 * @param unit
 	 */
-	public void setKeyExpire(String key, long timeout, TimeUnit unit) {
+	public static void setKeyExpire(String key, long timeout, TimeUnit unit) {
 		try {
 			stringRedisTemplate.expire(key, timeout, unit);
 		} catch (Exception e) {
@@ -53,7 +53,7 @@ public class RedisUtils {
 	 * @param key
 	 * @return
 	 */
-	public Long getKeyExpire(String key) {
+	public static Long getKeyExpire(String key) {
 		try {
 			return stringRedisTemplate.getExpire(key);
 		} catch (Exception e) {
@@ -67,7 +67,7 @@ public class RedisUtils {
 	 * @param key
 	 * @return
 	 */
-	public Boolean hasKey(String key) {
+	public static Boolean hasKey(String key) {
 		try {
 			return stringRedisTemplate.hasKey(key);
 		} catch (Exception e) {
@@ -82,7 +82,7 @@ public class RedisUtils {
 	 * @param timeUnit
 	 * @return
 	 */
-	public Long getKeyExpire(String key, TimeUnit timeUnit) {
+	public static Long getKeyExpire(String key, TimeUnit timeUnit) {
 		try {
 			return stringRedisTemplate.getExpire(key, timeUnit);
 		} catch (Exception e) {
@@ -91,6 +91,19 @@ public class RedisUtils {
 		}
 	}
 	
+	/**
+	 * 删除指定的key
+	 * @param key
+	 * @return
+	 */
+	public static Boolean deleteKey(String key) {
+		try {
+			return stringRedisTemplate.delete(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("添加String类型的值异常");
+		}
+	}
 	
 	/**
 	 * 添加String类型的值
@@ -107,6 +120,24 @@ public class RedisUtils {
 		}
 	}
 
+	
+	/**
+	 * 添加String类型的值
+	 * 
+	 * @param key     键名
+	 * @param value   键值
+	 * @param timeout 有效时间	默认为秒
+	 */
+	public static void setString(String key, String value, long timeout) {
+		try {
+			setString(key, value, timeout, TimeUnit.SECONDS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("添加String类型的值异常");
+		}
+	}
+	
+	
 	/**
 	 * 添加String类型的值
 	 * 
@@ -326,7 +357,7 @@ public class RedisUtils {
 	 * @param key
 	 * @param values
 	 */
-    public static void setSet(String key, String[] values) {
+    public static void setSet(String key, String... values) {
     	try {
     		stringRedisTemplate.opsForSet().add(key, values);
 		} catch (Exception e) {
@@ -359,7 +390,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().randomMember(key);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("随机获取set中的一个值异常");
     	}
     }
     
@@ -374,7 +405,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().randomMembers(key, count);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("随机获取set中的多个值异常");
     	}
     }
     
@@ -389,7 +420,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().distinctRandomMembers(key, count);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("随机获取set中的多个不重复的值异常");
     	}
     }
     
@@ -404,7 +435,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().remove(key, values);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("移除Set中指定元素的值异常");
     	}
     }
     
@@ -419,7 +450,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().move(key, value, destKey);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("将集合1中的指定元素移到集合2异常");
     	}
     }
     
@@ -428,12 +459,12 @@ public class RedisUtils {
      * @param key
      * @return
      */
-    public static String getRandomRemove(String key){
+    public static String getPopSet(String key){
     	try {
     		return stringRedisTemplate.opsForSet().pop(key);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("随机移除set中一个值异常");
     	}
     }
     
@@ -442,12 +473,12 @@ public class RedisUtils {
      * @param key
      * @return
      */
-    public static List<String> getRandomRemoveMore(String key, long count){
+    public static List<String> getPopSetMore(String key, long count){
     	try {
     		return stringRedisTemplate.opsForSet().pop(key, count);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("随机移除set中多个值异常");
     	}
     }
     
@@ -462,7 +493,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().union(key, otherKey);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("求两个set集合的并集异常");
     	}
     }
     
@@ -478,7 +509,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().difference(key, otherKey);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("求两个set集合的差集异常");
     	}
     }
     
@@ -494,7 +525,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForSet().intersect(key, otherKey);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("求两个set集合的交集异常");
     	}
     }
     
@@ -509,7 +540,7 @@ public class RedisUtils {
 			return stringRedisTemplate.opsForSet().isMember(key, o);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("获取set中所有的值异常");
+			throw new RuntimeException("判断set中是否存在指定的值异常");
 		}
     }
     
@@ -523,7 +554,7 @@ public class RedisUtils {
 			return stringRedisTemplate.opsForSet().size(key);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("获取set中所有的值异常");
+			throw new RuntimeException("获取set集合的长度异常");
 		}
     }
     
@@ -539,7 +570,7 @@ public class RedisUtils {
 			return stringRedisTemplate.opsForZSet().add(key, value, score);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("获取set中所有的值异常");
+			throw new RuntimeException("添加zset异常");
 		}
     }
     
@@ -555,7 +586,7 @@ public class RedisUtils {
 			return stringRedisTemplate.opsForZSet().remove(key, values);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("获取set中所有的值异常");
+			throw new RuntimeException("移除zset中多个值异常");
 		}
     }
     
@@ -571,7 +602,7 @@ public class RedisUtils {
 			return stringRedisTemplate.opsForZSet().incrementScore(key, value, delta);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("获取set中所有的值异常");
+			throw new RuntimeException("为zset指定元素加分异常");
 		}
     }
     
@@ -586,7 +617,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForZSet().reverseRank(key, o);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("获取zset中指定成员的排名异常");
     	}
     }
     
@@ -602,7 +633,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForZSet().rangeWithScores(key, start, end);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("获取zset中元素排名异常");
     	}
     }
     
@@ -618,7 +649,7 @@ public class RedisUtils {
     		return stringRedisTemplate.opsForZSet().range(key, start, end);
     	} catch (Exception e) {
     		e.printStackTrace();
-    		throw new RuntimeException("获取set中所有的值异常");
+    		throw new RuntimeException("获取zset中所有的值异常");
     	}
     }
 
