@@ -5,6 +5,17 @@ person:
       WangLuo: com.example.demo.handler.impl.WangLuo
     name: zhangsan
     
+    
+    
+###策略模式   redis发布订阅消息处理模块
+redismessage:
+    maps:
+      messagepush_a: com.example.demo.handler.impl.ARedisMessage
+      messagepush_b: com.example.demo.handler.impl.BRedisMessage
+      messagepush_c: com.example.demo.handler.impl.CRedisMessage
+    
+    
+    
 spring:
 ####静态资源配置
   resources:
@@ -74,7 +85,7 @@ spring:
   redis:
     database: 0
   # Redis服务器地址
-    host: 192.168.11.131
+    host: 192.168.11.132
   # Redis服务器连接端口
     port: 6379
   # Redis服务器连接密码（默认为空）

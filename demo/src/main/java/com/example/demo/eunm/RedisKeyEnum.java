@@ -11,7 +11,19 @@ public enum RedisKeyEnum {
 	/**
 	 * 菜单div键名key
 	 */
-	MENUKEY("menuDiv");
+	MENUKEY("menuDiv"),
+	/**
+	 * 订阅发布主题名称
+	 */
+	MESSAGEPUSH_A("messagepush_a"),
+	/**
+	 * 订阅发布主题名称
+	 */
+	MESSAGEPUSH_B("messagepush_b"),
+	/**
+	 * 订阅发布主题名称
+	 */
+	MESSAGEPUSH_C("messagepush_c");
 	
 	private String value;
 	
@@ -21,5 +33,9 @@ public enum RedisKeyEnum {
 	
 	public String getValue() {
 		return value;
+	}
+	
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

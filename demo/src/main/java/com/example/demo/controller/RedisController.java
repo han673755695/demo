@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import java.util.Date;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.common.ResultData;
+import com.example.demo.eunm.RedisKeyEnum;
 import com.example.demo.utils.RedisUtils;
 import com.example.demo.utils.UUIDUtils;
 
@@ -105,5 +108,49 @@ public class RedisController {
 		}
 		return success;
 	}
+	
+	
+	/**
+	 * 模拟分布式锁的实现
+	 * @return
+	 */
+	@RequestMapping("/getLock")
+	@ResponseBody
+	public ResultData getLock() {
+		ResultData success = ResultData.getSuccess();
+		String valueOf = String.valueOf(new Date().getTime() + 10000);
+		try {
+			Boolean setIfAbsent = stringRedisTemplate.opsForValue().setIfAbsent("name", valueOf, 10l, TimeUnit.SECONDS);
+			if (setIfAbsent) {
+				logger.info("获取锁");
+				
+				logger.info("执行完毕业务");
+				
+			}else {
+				logger.info("获取锁失败");
+			}
+			
+			success.setData(setIfAbsent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			logger.info("释放锁");
+			stringRedisTemplate.delete("name");
+		}
+		
+		return success;
+	}
+	
+	
+	
+	@RequestMapping("/messagepush")
+	@ResponseBody
+	public ResultData messagepush() {
+		ResultData success = ResultData.getSuccess();
+		stringRedisTemplate.convertAndSend(RedisKeyEnum.MESSAGEPUSH_A.getValue(), "aetregdg!");
+		
+		return success;
+	}
+	
 
 }
