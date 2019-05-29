@@ -23,6 +23,20 @@
 	</sql>
 	
 	
+	<select id="selectUserByNameAndPwd" resultMap="BaseResultMap"
+		parameterType="Map">
+		select
+		<include refid="Base_Column_List" />
+		from admin_user
+		where 1=1
+		<if test="username != null and username != '' ">
+			and name=#{username}
+		</if>
+		<if test="password != null and password != '' ">
+			and password=#{password}
+		</if>
+	</select>
+	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
 		select

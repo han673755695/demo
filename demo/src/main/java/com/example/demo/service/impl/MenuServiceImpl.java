@@ -102,4 +102,26 @@ public class MenuServiceImpl implements IMenuService {
 		}
 	}
 
+	@Override
+	public List<Menu> selectMenuByPid(Map<String, Object> params) {
+		try {
+
+			return menuMapper.selectMenuByPid(params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("修改数据失败");
+		}
+	}
+
+	@Override
+	public List<Menu> selectByUserId(String userId) {
+		try {
+
+			return menuMapper.selectByUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("修改数据失败");
+		}
+	}
+
 }

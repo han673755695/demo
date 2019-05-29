@@ -27,8 +27,8 @@ public class RequestParamUtils {
 	 * 
 	 * @return
 	 */
-	public static Map getParameterMap(HttpServletRequest request) {
-		Map parametersMap = new HashMap();
+	public static Map<String,Object> getParameterMap(HttpServletRequest request) {
+		Map<String,Object> parametersMap = new HashMap();
 		Enumeration paramters = request.getParameterNames();
 		while (paramters.hasMoreElements()) {
 			String name = (String) paramters.nextElement();

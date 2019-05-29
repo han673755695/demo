@@ -3,7 +3,7 @@ package com.example.demo.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Menu implements Serializable{
+public class Menu implements Serializable {
 	private String id;
 
 	private String parentId;
@@ -13,6 +13,8 @@ public class Menu implements Serializable{
 	private Date updateDate;
 
 	private String name;
+
+	private String menuType;
 
 	private String status;
 
@@ -36,6 +38,14 @@ public class Menu implements Serializable{
 
 	public String getId() {
 		return id;
+	}
+
+	public String getMenuType() {
+		return menuType;
+	}
+
+	public void setMenuType(String menuType) {
+		this.menuType = menuType;
 	}
 
 	public void setId(String id) {
@@ -117,8 +127,8 @@ public class Menu implements Serializable{
 	@Override
 	public String toString() {
 		return "Menu [id=" + id + ", parentId=" + parentId + ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ ", name=" + name + ", status=" + status + ", sort=" + sort + ", isParent=" + isParent + ", url=" + url
-				+ ", level=" + level + ", icon=" + icon + "]";
+				+ ", name=" + name + ", menuType=" + menuType + ", status=" + status + ", sort=" + sort + ", isParent="
+				+ isParent + ", url=" + url + ", level=" + level + ", icon=" + icon + "]";
 	}
 
 }

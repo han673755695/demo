@@ -17,6 +17,8 @@ public interface IUserService {
 
     User selectByPrimaryKey(String id);
     
+    User selectUserByNameAndPwd(Map<String,Object> params);
+    
     int updateByPrimaryKeySelective(User user);
 
     int updateByPrimaryKey(User user);

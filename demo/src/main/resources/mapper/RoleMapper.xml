@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.RoleMapper">
+	<resultMap id="BaseResultMap"
+		type="com.example.demo.domain.Role">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="roleName" property="rolename"
+			jdbcType="VARCHAR" />
+		<result column="bewrite" property="bewrite" jdbcType="VARCHAR" />
+		<result column="createUser" property="createuser"
+			jdbcType="VARCHAR" />
+		<result column="createDate" property="createdate"
+			jdbcType="TIMESTAMP" />
+		<result column="updateUser" property="updateuser"
+			jdbcType="VARCHAR" />
+		<result column="updateDate" property="updatedate"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, roleName, bewrite, createUser, createDate, updateUser, updateDate
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from admin_role
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_role
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.example.demo.domain.Role">
+		insert into admin_role (id, roleName, bewrite,
+		createUser, createDate, updateUser,
+		updateDate)
+		values (#{id,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR},
+		#{bewrite,jdbcType=VARCHAR},
+		#{createuser,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR},
+		#{updatedate,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.example.demo.domain.Role">
+		insert into admin_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="rolename != null">
+				roleName,
+			</if>
+			<if test="bewrite != null">
+				bewrite,
+			</if>
+			<if test="createuser != null">
+				createUser,
+			</if>
+			<if test="createdate != null">
+				createDate,
+			</if>
+			<if test="updateuser != null">
+				updateUser,
+			</if>
+			<if test="updatedate != null">
+				updateDate,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="rolename != null">
+				#{rolename,jdbcType=VARCHAR},
+			</if>
+			<if test="bewrite != null">
+				#{bewrite,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				#{createuser,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				#{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateuser != null">
+				#{updateuser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedate != null">
+				#{updatedate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.example.demo.domain.Role">
+		update admin_role
+		<set>
+			<if test="rolename != null">
+				roleName = #{rolename,jdbcType=VARCHAR},
+			</if>
+			<if test="bewrite != null">
+				bewrite = #{bewrite,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				createUser = #{createuser,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				createDate = #{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateuser != null">
+				updateUser = #{updateuser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedate != null">
+				updateDate = #{updatedate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.example.demo.domain.Role">
+		update admin_role
+		set roleName = #{rolename,jdbcType=VARCHAR},
+		bewrite = #{bewrite,jdbcType=VARCHAR},
+		createUser = #{createuser,jdbcType=VARCHAR},
+		createDate = #{createdate,jdbcType=TIMESTAMP},
+		updateUser = #{updateuser,jdbcType=VARCHAR},
+		updateDate = #{updatedate,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

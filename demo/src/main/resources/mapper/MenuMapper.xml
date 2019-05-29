@@ -60,6 +60,19 @@
 		
 	</select>
 	
+	
+	<!-- 根据实体类查询 -->
+	<select id="selectMenuByPid" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+			<include refid="Base_Column_List" />
+		from admin_menu
+		where 1=1
+		<if test="parentId != null and parentId != '' ">
+			and parent_id = #{parentId,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
 	<!-- 查询数量 -->
 	<select id="totalCount" resultType="Integer"
 		parameterType="Map">
@@ -239,4 +252,25 @@
 		WHERE
 		id=#{id,jdbcType=VARCHAR}
 	</update>
+	
+	<!-- 根据用户id获取该用户的权限 -->
+	<select id="selectByUserId" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+			m.*
+		FROM
+			admin_user_role ur,
+			admin_role r,
+			admin_role_menu rm,
+			admin_menu m
+		WHERE
+			ur.userId = #{id,jdbcType=VARCHAR}
+		AND ur.roleId = r.id
+		AND r.id = rm.roleId
+		AND rm.menuId = m.id
+	</select>
+	
+	
+	
+	
 </mapper>

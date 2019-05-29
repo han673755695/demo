@@ -2,6 +2,7 @@ package com.example.demo.controller.admin;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
 import com.example.demo.domain.Menu;
+import com.example.demo.eunm.CommonEunm;
 import com.example.demo.eunm.RedisKeyEnum;
 import com.example.demo.service.IMenuService;
 import com.example.demo.utils.RedisUtils;
@@ -211,6 +213,28 @@ public class MenuController {
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());
+			e.printStackTrace();
+		}
+		return success;
+	}
+	
+	/**
+	 * 加载后台管理左侧的菜单
+	 * @param model
+	 * @param request
+	 * @param menu
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/list")
+	public ResultData list(Model model, HttpServletRequest request, Menu menu) {
+		ResultData success = ResultData.getSuccess();
+		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("menuType", CommonEunm.menuType.菜单.getValue());
+			List<Menu> menuList = menuService.selectMenuByPid(params);
+			success.setData(menuList);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return success;

@@ -3,6 +3,124 @@
 	<meta charset="UTF-8">
 	<#include "common/head.html"/>
 	<@aHead title="后台登录-X-admin2.2" />
+	<link rel="stylesheet" href="${base}/platform/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link rel="stylesheet" href="${base}/platform/zTree/css/demo.css" type="text/css">
+	<script type="text/javascript" src="${base}/platform/zTree/js/jquery.ztree.core-3.5.js"></script>
+	
+	<link rel="stylesheet" href="${base}/platform/zTree/css/ztree.css" type="text/css"/>
+	<style type="text/css">
+		.ztree li span.button {background-image:url("${base}/platform/images/left_menuForOutLook.png"); *background-image:url("${base}/platform/images/left_menuForOutLook.gif")}
+	</style>
+	
+	<SCRIPT type="text/javascript">
+		
+		var curMenu = null, zTree_Menu = null;
+		var setting = {
+			view: {
+				showLine: false,
+				showIcon: false,
+				selectedMulti: false,
+				dblClickExpand: false,
+				addDiyDom: addDiyDom
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				beforeClick: beforeClick
+			}
+		};
+
+
+		function addDiyDom(treeId, treeNode) {
+			var spaceWidth = 5;
+			var switchObj = $("#" + treeNode.tId + "_switch"),
+			icoObj = $("#" + treeNode.tId + "_ico");
+			switchObj.remove();
+			icoObj.before(switchObj);
+
+			if (treeNode.level > 1) {
+				var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level)+ "px'></span>";
+				switchObj.before(spaceStr);
+			}
+		}
+
+		function beforeClick(treeId, treeNode) {
+			if (treeNode.level == 0 ) {
+				var zTree = $.fn.zTree.getZTreeObj("treeMenu");
+				zTree.expandNode(treeNode);
+				return false;
+			}
+			return true;
+		}
+		
+		//菜单跳转函数
+		function znode(name,url){
+			if(url){
+				xadmin.add_tab(name,url);
+			}
+		}
+		
+
+		$(document).ready(function(){
+			var zNodes = [];
+			//ajax请求获取菜单数据list
+			$.ajax({
+				type: "POST", //GET或POST,
+				async:false, //默认设置为true，所有请求均为异步请求。
+				url: "${base}/admin/menu/list",
+				data: {},
+				dataType: "json", //xml、html、script、jsonp、text
+				success: function(dataResult) {
+					if(dataResult && dataResult.status == 'success'){
+						
+						$.each(dataResult.data,function(index,menu){
+							var node = {};
+							if(index == 0){
+								node.id = menu.id;
+								node.pId = menu.parentId;
+								node.name = menu.name;
+								node.id = menu.id;
+								node.click = "znode(" + menu.name + "," + menu.url + ")";
+								node.open = true;
+							} else {
+								node.id = menu.id;
+								node.pId = menu.parentId;
+								node.name = menu.name;
+								node.id = menu.id;
+								node.click = "znode(\'" + menu.name + "\',\'" + menu.url + "\')";
+							}
+							zNodes.push(node);
+						});
+					}else{
+						layer.alert('加载菜单失败', {icon: 5});
+					}
+				},
+				error:function(){
+					layer.alert('加载菜单失败', {icon: 5});
+				},
+			});
+			
+			var treeObj = $("#treeMenu");
+			$.fn.zTree.init(treeObj, setting, zNodes);
+			zTree_Menu = $.fn.zTree.getZTreeObj("treeMenu");
+			curMenu = zTree_Menu.getNodes()[0].children[0];
+			zTree_Menu.selectNode(curMenu);
+
+			treeObj.hover(function () {
+				if (!treeObj.hasClass("showIcon")) {
+					treeObj.addClass("showIcon");
+				}
+			}, function() {
+				treeObj.removeClass("showIcon");
+			});
+			
+		});
+
+	</SCRIPT>
+	
     <body class="index">
         <!-- 顶部开始 -->
         <div class="container">
@@ -54,14 +172,9 @@
         <!-- 顶部结束 -->
         <!-- 中部开始 -->
         <!-- 左侧菜单开始 -->
-        <div class="left-nav">
-            <div id="side-nav">
-                <ul id="nav">
-                	${div!''}
-                </ul>
-                
-            </div>
-        </div>
+        <div class="zTreeDemoBackground">
+			<ul id="treeMenu" class="ztree"></ul>
+		</div>
         <!-- <div class="x-slide_left"></div> -->
         <!-- 左侧菜单结束 -->
         <!-- 右侧主体开始 -->
@@ -88,11 +201,6 @@
         <style id="theme_style"></style>
         <!-- 右侧主体结束 -->
         <!-- 中部结束 -->
-        <script>//百度统计可去掉
-            $(function(){
-            	$("#nav").html();
-            });
-        </script>
     </body>
 
 </html>

@@ -14,6 +14,8 @@ public interface UserMapper {
 
     User selectByPrimaryKey(String id);
     
+    User selectUserByNameAndPwd(Map<String,Object> params);
+    
     List<Map<String,Object>> selectBySelective(Map<String,Object> params);
 
     int updateByPrimaryKeySelective(User user);

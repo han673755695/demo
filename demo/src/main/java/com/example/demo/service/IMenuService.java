@@ -18,6 +18,10 @@ public interface IMenuService {
 
     //根据实体类查询
     List<Menu> selectListByMenu(Map<String, Object> params);
+    
+    
+    //根据菜单父id获取子菜单
+    List<Menu> selectMenuByPid(Map<String, Object> params);
 
     //根据主键id查询
     Menu selectByPrimaryKey(String id);
@@ -30,4 +34,7 @@ public interface IMenuService {
     
     //查询数量
     int totalCount(Map<String,Object> params);
+    
+    //根据用户id获取该用户的权限
+    List<Menu> selectByUserId(String userId);
 }

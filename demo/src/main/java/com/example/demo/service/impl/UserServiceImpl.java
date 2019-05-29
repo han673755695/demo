@@ -101,4 +101,14 @@ public class UserServiceImpl implements IUserService {
 		}
 	}
 
+	@Override
+	public User selectUserByNameAndPwd(Map<String, Object> params) {
+		try {
+			return userDao.selectUserByNameAndPwd(params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
 }
