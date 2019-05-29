@@ -1,5 +1,7 @@
 package com.example.demo.common;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,13 @@ public class ErrorPageController {
 
 	@RequestMapping(value = "/errorPage")
 	public String error(Model model) {
+		return "errorPage";
+	}
+	
+	@RequestMapping(value = "/unauthorized")
+	public String unauthorized(Model model, HttpServletRequest request) {
+		model.addAttribute("url", request.getRequestURI());
+		model.addAttribute("exception", "没有权限访问,请联系管理员");
 		return "errorPage";
 	}
 

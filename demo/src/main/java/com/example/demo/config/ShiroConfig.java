@@ -59,7 +59,7 @@ public class ShiroConfig {
 		// 首页
 		shiroFilterFactoryBean.setSuccessUrl("/admin/index/toIndex");
 		// 错误页面，认证不通过跳转
-		shiroFilterFactoryBean.setUnauthorizedUrl("/error");
+		shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 		return shiroFilterFactoryBean;
 	}

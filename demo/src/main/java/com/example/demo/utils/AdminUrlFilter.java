@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
@@ -13,18 +14,13 @@ public class AdminUrlFilter extends PermissionsAuthorizationFilter {
 	public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
 			throws IOException {
 		Subject subject = this.getSubject(request, response);
-		String[] perms = (String[]) mappedValue;
-		boolean isPermitted = true;
-		if (perms != null && perms.length > 0) {
-			if (perms.length == 1) {
-				if (!subject.isPermitted(perms[0])) {
-					isPermitted = false;
-				}
-			} else if (!subject.isPermittedAll(perms)) {
-				isPermitted = false;
-			}
-		}
+		
+		HttpServletRequest servletRequest = (HttpServletRequest) request;
+		String uri = servletRequest.getRequestURI();
+		
+		boolean permitted = subject.isPermitted(uri);
 
-		return isPermitted;
+		return permitted;
 	}
+	
 }

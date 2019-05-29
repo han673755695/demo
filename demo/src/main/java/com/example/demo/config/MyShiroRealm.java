@@ -17,6 +17,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import com.example.demo.domain.Menu;
 import com.example.demo.domain.User;
@@ -25,7 +26,7 @@ import com.example.demo.service.IUserService;
 
 public class MyShiroRealm extends AuthorizingRealm {
 
-	//private static final Logger logger = Logger.getLogger(MyShiroRealm.class);
+	private static final Logger logger = Logger.getLogger(MyShiroRealm.class);
 	
 	Boolean cachingEnabled = true;
 	@Autowired
@@ -42,11 +43,13 @@ public class MyShiroRealm extends AuthorizingRealm {
 		Session session = SecurityUtils.getSubject().getSession();
 		User user = (User) session.getAttribute("user");
 		List<Menu> menuList = menuService.selectByUserId(user.getId());
-		//logger.info("menuList: " + menuList);
-//		for (Menu menu : menuList) {
-//			simpleAuthorInfo.addStringPermission(menu.getUrl());
-//		}
-		//simpleAuthorInfo.addStringPermission("/admin/menu/list");// 给当前用户授权url为hello的权限码
+		logger.info("menuList: " + menuList);
+		for (Menu menu : menuList) {
+			if (!StringUtils.isEmpty(menu.getUrl())) {
+				simpleAuthorInfo.addStringPermission(menu.getUrl());
+			}
+		}
+		simpleAuthorInfo.addStringPermission("/admin/menu/list");// 给当前用户授权url为hello的权限码
 		return simpleAuthorInfo;
 	}
 
