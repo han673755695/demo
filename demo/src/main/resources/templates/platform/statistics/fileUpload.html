@@ -1,22 +1,127 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
-	<meta charset="UTF-8">
-	<#include "../common/head.html">
+	<meta charset="UTF-8"/>
+	<#include "../common/head.html"/>
 	<@aHead title="后台登录-X-admin2.2" />
-	<link rel="stylesheet" href="${base}/platform/css/upload.css">
-<body>
-	<div class="main">
-		<div id="showimg">
-			<ul id="showui">
-			</ul>
-			<div id="showinput"></div>
-		</div>
-		<div class="upimg">
-			<input type="file" id="upgteimg" value="" multiple />
-		</div>
-		<button class="btn" id="submit">开始上传</button>
-	</div>
-	<script src="${base}/platform/js/jquery.min.js"></script>
-	<script type="text/javascript" src="${base}/platform/js/updateimg.js"></script>
-</body>
+
+		<body>
+
+			<div class="layui-upload">
+				<button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+				<div class="layui-upload-list">
+					<table class="layui-table">
+						<thead>
+							<tr>
+								<th>图片预览</th>
+								<th>状态</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="demoList"></tbody>
+					</table>
+				</div>
+				<div class="layui-btn" id="testListAction">开始上传</div>
+				
+			</div>
+
+			<script type="text/javascript">
+				
+				layui.use('upload', function(){
+					var upload = layui.upload;
+					//多文件列表示例
+					var demoListView = $('#demoList');
+					uploadListIns = upload.render({
+						elem: '#testList',
+						url: '${base}/admin/upload/uploadFile',
+						accept: 'images',
+						multiple: true,
+						auto: true,
+						choose: function(obj) {
+							var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+							//读取本地文件
+							obj.preview(function(index, file, result) {
+								var tr = $(['<tr id="upload-' + index + '">',
+									'<td>' + '<img src="' + result + '" data-path="">' + '</td>',
+									'<td>等待上传</td>',
+									'<td>',
+									'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>',
+									'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>',
+									'<button class="layui-btn layui-btn-xs" onclick="up(this)">上移</button>',
+									'<button class="layui-btn layui-btn-xs" onclick="down(this)">下移</button>',
+									'</td>',
+									'</tr>'
+								].join(''));
+	
+								//单个重传
+								tr.find('.demo-reload').on('click', function() {
+									obj.upload(index, file);
+								});
+	
+								//删除
+								tr.find('.demo-delete').on('click', function() {
+									delete files[index]; //删除对应的文件
+									tr.remove();
+									uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+								});
+	
+								demoListView.append(tr);
+							});
+						},
+						done: function(res, index, upload) {
+							if(res.status == 'success') { //上传成功
+								var tr = demoListView.find('tr#upload-' + index);
+								tds = tr.children();
+								tds.eq(0).find("img").attr("src",'${base}' + res.data);
+								tds.eq(0).find("img").attr("data-path",res.data);
+								tds.eq(1).html('<span style="color: #5FB878;">上传成功</span>');
+								return delete this.files[index]; //删除文件队列已经上传成功的文件
+							}
+							this.error(index, upload);
+						},
+						error: function(index, upload) {
+							var tr = demoListView.find('tr#upload-' + index),
+								tds = tr.children();
+							tds.eq(1).html('<span style="color: #FF5722;">上传失败</span>');
+							tds.eq(2).find('.demo-reload').removeClass('layui-hide'); //显示重传
+						}
+					});
+				});
+				
+				
+				/* 上移 */
+				function up(obj){
+					//当前
+					var tr_cur = $(obj).parent().parent();
+					//上一个
+					var tr_prev = $(obj).parent().parent().prev();
+					
+					if(tr_prev){
+						tr_prev.before(tr_cur);
+					}
+				}
+				
+				/* 下移 */
+				function down(obj){
+					//当前
+					var tr_cur = $(obj).parent().parent();
+					//下一个
+					var tr_next = $(obj).parent().parent().next();
+					
+					if(tr_next){
+						tr_cur.before(tr_next);
+					}
+				}
+				
+				
+				$("#testListAction").on("click",function(){
+					var paths = new Array();
+					$("table").find("img").each(function(index,ele){
+						paths.push($(ele).attr("data-path"));
+					});
+					console.log("paths",paths);
+				})
+				
+			</script>
+
+		</body>
 </html>

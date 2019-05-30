@@ -73,15 +73,6 @@ public class LoginController {
 	        // 执行认证登陆
 	        subject.login(token);
 			
-//			User user = userService.selectUserByNameAndPwd(parameterMap);
-//			if (user == null) {
-//				success.setStatus(ResultData.ERROR);
-//				success.setMessage("用户名或密码不正确");
-//				return success;
-//			}
-//			success.setMessage("登陆成功");
-			//request.getSession().setAttribute("user", user);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("登陆异常");

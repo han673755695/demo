@@ -51,7 +51,7 @@ public class ShiroConfig {
 		map.put("/platform/**", "anon");
 		// 登陆接口
 		map.put("/admin/login/login", "anon");
-		map.put("/admin/menu/**", "adminUrlFilter");
+		//map.put("/admin/menu/**", "adminUrlFilter");
 		map.put("/**", "authc");
 		System.out.println("map: " + map);
 		// 登录页面
