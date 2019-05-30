@@ -85,7 +85,7 @@
 								node.pId = menu.parentId;
 								node.name = menu.name;
 								node.id = menu.id;
-								node.click = "znode(" + menu.name + "," + menu.url + ")";
+								node.click = "znode(\'" + menu.name + "\',\'" + menu.url + "\')";
 								node.open = true;
 							} else {
 								node.id = menu.id;
@@ -108,8 +108,8 @@
 			var treeObj = $("#treeMenu");
 			$.fn.zTree.init(treeObj, setting, zNodes);
 			zTree_Menu = $.fn.zTree.getZTreeObj("treeMenu");
-			curMenu = zTree_Menu.getNodes()[0].children[0];
-			zTree_Menu.selectNode(curMenu);
+			/* curMenu = zTree_Menu.getNodes()[0].children[0];
+			zTree_Menu.selectNode(curMenu); */
 
 			treeObj.hover(function () {
 				if (!treeObj.hasClass("showIcon")) {

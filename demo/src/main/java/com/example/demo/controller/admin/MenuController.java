@@ -128,22 +128,22 @@ public class MenuController {
 				menu.setId(UUIDUtils.getUUID());
 				if (StringUtils.isEmpty(menu.getParentId())) {
 					menu.setParentId("-1");
-				}else {
-					Menu parentMenu = menuService.selectByPrimaryKey(menu.getParentId());
-					menuService.updateActiveByMenu(parentMenu);
 				}
 				menu.setCreateDate(new Date());
 				menu.setUpdateDate(new Date());
 				logger.info(menu.toString());
-				int insertActive = menuService.insertActive(menu);
-				logger.info(String.valueOf(insertActive));
-				success.setData(insertActive);
+				menuService.insertActive(menu);
 			}else {
 				//修改
 				menuService.updateActiveByMenu(menu);
 			}
-			redisTemplate.delete(RedisKeyEnum.MENUKEY.getValue());
-			redisTemplate.delete(RedisKeyEnum.MENUKEY_ALL.getValue());
+			
+			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY.getValue())) {
+				redisTemplate.delete(RedisKeyEnum.MENUKEY.getValue());
+			}
+			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY_ALL.getValue())) {
+				redisTemplate.delete(RedisKeyEnum.MENUKEY_ALL.getValue());
+			}
 			logger.info("更新redis中菜单信息");
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
@@ -168,6 +168,12 @@ public class MenuController {
 			String[] split = ids.split(",");
 			List<String> asList = Arrays.asList(split);
 			menuService.deleteByPrimaryKey(asList);
+			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY.getValue())) {
+				redisTemplate.delete(RedisKeyEnum.MENUKEY.getValue());
+			}
+			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY_ALL.getValue())) {
+				redisTemplate.delete(RedisKeyEnum.MENUKEY_ALL.getValue());
+			}
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());
@@ -213,6 +219,12 @@ public class MenuController {
 			}
 			Menu result = menuService.selectByPrimaryKey(id);
 			success.setData(result);
+			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY.getValue())) {
+				redisTemplate.delete(RedisKeyEnum.MENUKEY.getValue());
+			}
+			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY_ALL.getValue())) {
+				redisTemplate.delete(RedisKeyEnum.MENUKEY_ALL.getValue());
+			}
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());

@@ -12,7 +12,9 @@
 						<label for="name" class="layui-form-label">
                             <span class="x-red">*</span>菜单名称</label>
 						<div class="layui-input-inline">
-							<input type="text" id="name" name="name" value="${(resultdata.name)!''}" required="" lay-verify="required" autocomplete="off" class="layui-input"></div>
+							<input type="text" id="name" name="name" value="${(resultdata.name)!''}" required="" lay-verify="required" autocomplete="off" class="layui-input"/>
+							<input type="hidden" id="id" name="id" value="${(resultdata.id)!''}" />
+						</div>
 					</div>
 					<div class="layui-form-item">
 						<label for="url" class="layui-form-label">
@@ -56,7 +58,7 @@
 					</div>
 					<div class="layui-form-item">
 						<label for="L_repass" class="layui-form-label"></label>
-						<button class="layui-btn" lay-filter="add" lay-submit="">增加</button></div>
+						<button class="layui-btn" lay-filter="add" id="sub" lay-submit="">提交</button></div>
 				</form>
 			</div>
 		</div>
@@ -85,11 +87,11 @@
 											xadmin.father_reload();
 										});
 									}else{
-										layer.alert('保存失败', {icon: 5});
+										layer.alert('保存失败555', {icon: 5});
 									}
 								},
 								error:function(){
-									layer.alert('保存失败', {icon: 5});
+									layer.alert('保存失败6666', {icon: 5});
 								}
 							});
 							return false;
@@ -140,18 +142,8 @@
 				   var form = layui.form;
 				   form.render();
 				});
+				
 			}
-			
-			/* $("#no").click(function(){
-				alert("ok")
-				$("url").attr("lay-verify","required");
-				$("span").text("*");
-			}); */
-			
-			/* $("input[name='isParent']").on('click',function(){
-			    var sex = $(this).val();
-			    alert(sex);
-			}); */
 			
 		</script>
 	</body>
