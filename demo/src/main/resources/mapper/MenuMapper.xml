@@ -12,18 +12,16 @@
 		<result column="update_date" property="updateDate"
 			jdbcType="TIMESTAMP" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="menu_type" property="menuType" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 		<result column="sort" property="sort" jdbcType="VARCHAR" />
-		<result column="is_parent" property="isParent"
-			jdbcType="VARCHAR" />
 		<result column="url" property="url" jdbcType="VARCHAR" />
-		<result column="level" property="level" jdbcType="VARCHAR" />
 		<result column="icon" property="icon" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<!-- 基础的数据库字段 -->
 	<sql id="Base_Column_List">
-		id, parent_id, create_date, update_date, name, status, sort, is_parent,level,icon,
+		id, parent_id, create_date, update_date, name, status, sort, menu_type, icon,
 		url
 	</sql>
 	
@@ -36,9 +34,6 @@
 		where 1=1
 		<if test="name != null and name != '' ">
 			and name like concat('%',#{name},'%')
-		</if>
-		<if test="level != null and level != '' ">
-			and level = #{level,jdbcType=VARCHAR}
 		</if>
 		<if test="parentId != null and parentId != '' ">
 			and parent_id = #{parentId,jdbcType=VARCHAR}
@@ -113,10 +108,10 @@
 	<insert id="insert"
 		parameterType="com.example.demo.domain.Menu">
 		insert into admin_menu 
-			(id, parent_id, create_date,update_date, name, status,sort, is_parent, level, icon, url)
+			(id, parent_id, create_date,update_date, name, status,sort, menu_type, icon, url)
 		values 
 			(#{id}, #{parentId},#{createDate},#{updateDate}, 
-				#{name}, #{status},#{sort}, #{isParent}, #{level}, #{icon},#{url})
+				#{name}, #{status},#{sort}, #{menu_type}, #{icon},#{url})
 	</insert>
 	
 	<!-- 动态添加数据 -->
@@ -145,11 +140,8 @@
 			<if test="sort != null">
 				sort,
 			</if>
-			<if test="isParent != null">
-				is_parent,
-			</if>
-			<if test="level != null">
-				level,
+			<if test="menuType != null">
+				menu_type,
 			</if>
 			<if test="icon != null">
 				icon,
@@ -180,11 +172,8 @@
 			<if test="sort != null">
 				#{sort,jdbcType=VARCHAR},
 			</if>
-			<if test="isParent != null">
-				#{isParent,jdbcType=VARCHAR},
-			</if>
-			<if test="level != null">
-				#{level,jdbcType=VARCHAR},
+			<if test="menuType != null">
+				#{menuType,jdbcType=VARCHAR},
 			</if>
 			<if test="icon != null">
 				#{icon,jdbcType=VARCHAR},
@@ -217,14 +206,11 @@
 			<if test="sort != null">
 				sort = #{sort,jdbcType=VARCHAR},
 			</if>
-			<if test="isParent != null">
-				is_parent = #{isParent,jdbcType=VARCHAR},
+			<if test="menuType != null">
+				menu_type = #{menuType,jdbcType=VARCHAR},
 			</if>
 			<if test="icon != null">
 				icon = #{icon,jdbcType=VARCHAR},
-			</if>
-			<if test="level != null">
-				level = #{level,jdbcType=VARCHAR},
 			</if>
 			<if test="url != null">
 				url = #{url,jdbcType=VARCHAR},
@@ -245,8 +231,7 @@
 		name = #{name,jdbcType=VARCHAR},
 		status = #{status,jdbcType=VARCHAR},
 		sort = #{sort,jdbcType=VARCHAR},
-		is_parent = #{isParent,jdbcType=VARCHAR},
-		level = #{level,jdbcType=VARCHAR},
+		menu_type = #{menuType,jdbcType=VARCHAR},
 		icon = #{icon,jdbcType=VARCHAR},
 		url = #{url,jdbcType=VARCHAR}
 		WHERE

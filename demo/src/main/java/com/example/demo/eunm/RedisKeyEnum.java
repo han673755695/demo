@@ -11,7 +11,12 @@ public enum RedisKeyEnum {
 	/**
 	 * 菜单div键名key
 	 */
-	MENUKEY("menuDiv"),
+	MENUKEY("menuList"),
+	/**
+	 * 全部菜单包含按钮
+	 */
+	MENUKEY_ALL("menuListAll"),
+	
 	/**
 	 * 订阅发布主题名称
 	 */

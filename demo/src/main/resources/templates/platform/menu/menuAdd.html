@@ -31,23 +31,6 @@
 					</div>
 					
 					<div class="layui-form-item">
-		                <label class="layui-form-label"><span class="x-red">*</span>是否是父菜单</label>
-		                <div class="layui-input-block">
-		                	<#if (resultdata.isParent)?? && (resultdata.isParent) == '1'>
-		                		<input type="radio" name="isParent" value="1" lay-skin="primary" title="是" checked="checked">
-			                	<input type="radio" name="isParent" value="2" lay-skin="primary" title="否">
-		                	</#if>
-		                	<#if (resultdata.isParent)?? && (resultdata.isParent) == '2'>
-		                		<input type="radio" name="isParent" value="1" lay-skin="primary" title="是">
-			                	<input type="radio" name="isParent" value="2" lay-skin="primary" title="否" checked="checked">
-		                	</#if>
-		                	<#if !(resultdata.isParent)??>
-		                		<input type="radio" name="isParent" value="1" lay-skin="primary" title="是">
-			                	<input type="radio" name="isParent" value="2" lay-skin="primary" title="否">
-		                	</#if>
-		                </div>
-	                </div>
-					<div class="layui-form-item">
 		                <label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
 		                <div class="layui-input-block">
 		                	<#if (resultdata.status)?? && (resultdata.status) == '1'>

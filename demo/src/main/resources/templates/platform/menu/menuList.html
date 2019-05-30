@@ -64,7 +64,6 @@
                                         <th>修改时间</th>
                                         <th>是否可用</th>
                                         <th>排序</th>
-                                        <th>是否是父菜单</th>
                                         <th>url</th>
                                         <th>操作</th></tr>
                                 </thead>
@@ -82,10 +81,6 @@
 		                                        	<#if menu.status == '2'>不可用</#if>
 		                                        </td>
 		                                        <td>${(menu.sort)!''}</td>
-		                                        <td>
-		                                        	<#if menu.isParent == '1'>是</#if>
-		                                        	<#if menu.isParent == '2'>不是</#if>
-		                                        </td>
 		                                        <td>${(menu.url)!''}</td>
 		                                        <td class="td-manage">
 		                                            <a title="查看" onclick="xadmin.open('编辑','${base}/admin/menu/menuEdit?id=${menu.id}')" href="javascript:;">

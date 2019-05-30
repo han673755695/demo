@@ -71,7 +71,9 @@
 				type: "POST", //GET或POST,
 				async:false, //默认设置为true，所有请求均为异步请求。
 				url: "${base}/admin/menu/list",
-				data: {},
+				data: {
+					menuType: '1'
+				},
 				dataType: "json", //xml、html、script、jsonp、text
 				success: function(dataResult) {
 					if(dataResult && dataResult.status == 'success'){

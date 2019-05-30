@@ -20,11 +20,7 @@ public class Menu implements Serializable {
 
 	private String sort;
 
-	private String isParent;
-
 	private String url;
-
-	private String level;
 
 	private String icon;
 
@@ -50,14 +46,6 @@ public class Menu implements Serializable {
 
 	public void setId(String id) {
 		this.id = id == null ? null : id.trim();
-	}
-
-	public String getLevel() {
-		return level;
-	}
-
-	public void setLevel(String level) {
-		this.level = level;
 	}
 
 	public String getParentId() {
@@ -108,14 +96,6 @@ public class Menu implements Serializable {
 		this.sort = sort == null ? null : sort.trim();
 	}
 
-	public String getIsParent() {
-		return isParent;
-	}
-
-	public void setIsParent(String isParent) {
-		this.isParent = isParent == null ? null : isParent.trim();
-	}
-
 	public String getUrl() {
 		return url;
 	}
@@ -127,8 +107,8 @@ public class Menu implements Serializable {
 	@Override
 	public String toString() {
 		return "Menu [id=" + id + ", parentId=" + parentId + ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ ", name=" + name + ", menuType=" + menuType + ", status=" + status + ", sort=" + sort + ", isParent="
-				+ isParent + ", url=" + url + ", level=" + level + ", icon=" + icon + "]";
+				+ ", name=" + name + ", menuType=" + menuType + ", status=" + status + ", sort=" + sort + ", url=" + url
+				+ ", icon=" + icon + "]";
 	}
 
 }

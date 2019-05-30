@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,8 @@ public class MenuController {
 
 	@Autowired
 	private IMenuService menuService;
+	@Autowired
+	private RedisTemplate redisTemplate;
 	
 	private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 	
@@ -127,7 +130,6 @@ public class MenuController {
 					menu.setParentId("-1");
 				}else {
 					Menu parentMenu = menuService.selectByPrimaryKey(menu.getParentId());
-					parentMenu.setIsParent("1");
 					menuService.updateActiveByMenu(parentMenu);
 				}
 				menu.setCreateDate(new Date());
@@ -140,7 +142,8 @@ public class MenuController {
 				//修改
 				menuService.updateActiveByMenu(menu);
 			}
-			RedisUtils.deleteKey(RedisKeyEnum.MENUKEY.getValue());
+			redisTemplate.delete(RedisKeyEnum.MENUKEY.getValue());
+			redisTemplate.delete(RedisKeyEnum.MENUKEY_ALL.getValue());
 			logger.info("更新redis中菜单信息");
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
@@ -219,7 +222,7 @@ public class MenuController {
 	}
 	
 	/**
-	 * 加载后台管理左侧的菜单
+	   * 加载后台管理的菜单
 	 * @param model
 	 * @param request
 	 * @param menu
@@ -230,10 +233,38 @@ public class MenuController {
 	public ResultData list(Model model, HttpServletRequest request, Menu menu) {
 		ResultData success = ResultData.getSuccess();
 		try {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("menuType", CommonEunm.menuType.菜单.getValue());
-			List<Menu> menuList = menuService.selectMenuByPid(params);
-			success.setData(menuList);
+			Map<String, Object> parameterMap = RequestParamUtils.getParameterMap(request);
+			String menuType = (String) parameterMap.get("menuType");
+			if (CommonEunm.menuType.菜单.getValue().equals(menuType)) {
+				//菜单
+				if (redisTemplate.hasKey(RedisKeyEnum.MENUKEY.getValue())) {
+					List<Menu> menuList = (List<Menu>) redisTemplate.opsForValue().get(RedisKeyEnum.MENUKEY.getValue());
+					if (menuList != null && menuList.size() > 0) {
+						success.setData(menuList);
+						logger.info("从redis中获取菜单");
+						return success;
+					}
+				}
+				logger.info("从数据库中获取菜单");
+				List<Menu> menuList = menuService.selectMenuByPid(parameterMap);
+				success.setData(menuList);
+				redisTemplate.opsForValue().set(RedisKeyEnum.MENUKEY.getValue(), menuList);
+			}else {
+				//菜单和按钮全部查询
+				if (redisTemplate.hasKey(RedisKeyEnum.MENUKEY_ALL.getValue())) {
+					List<Menu> menuList = (List<Menu>) redisTemplate.opsForValue().get(RedisKeyEnum.MENUKEY_ALL.getValue());
+					if (menuList != null && menuList.size() > 0) {
+						success.setData(menuList);
+						logger.info("从redis中获取全部菜单,包含按钮");
+						return success;
+					}
+				}
+				logger.info("从数据库中获取全部菜单,包含按钮");
+				List<Menu> menuList = menuService.selectMenuByPid(parameterMap);
+				success.setData(menuList);
+				redisTemplate.opsForValue().set(RedisKeyEnum.MENUKEY_ALL.getValue(), menuList);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
