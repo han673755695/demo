@@ -3,6 +3,10 @@
 	<meta charset="UTF-8">
 	<#include "../common/head.html"/>
 	<@aHead title="后台登录-X-admin2.2" />
+	<link rel="stylesheet" href="${base}/platform/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link rel="stylesheet" href="${base}/platform/zTree/css/demo.css" type="text/css">
+	<script type="text/javascript" src="${base}/platform/zTree/js/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="${base}/platform/zTree/js/jquery.ztree.excheck-3.5.js"></script>
 
 	<body>
 		<div class="layui-fluid">
@@ -25,28 +29,25 @@
 					
 					<div class="layui-inline">
 						<label class="layui-form-label">选择父菜单</label>
+						
 						<div class="layui-input-inline">
-							<select id="parentId" name="parentId" lay-search="">
-								<option value="">直接选择或搜索选择</option>
-							</select>
+							<input type="text" id="citySel" placeholder="选择菜单" readonly required="" lay-verify="" autocomplete="off" class="layui-input" onclick="showMenu()">
+							<input type="hidden" id="parentId" name="parentId"/>
 						</div>
 					</div>
+					
+					<div id="menuContent" class="menuContent" style="display:none; position: absolute; left: 126px; top: 137px; z-index: 5; background-color: rgb(255, 255, 253);">
+						<ul id="treeDemo" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
+					</div>
+					
+					
 					
 					<div class="layui-form-item">
 		                <label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
 		                <div class="layui-input-block">
-		                	<#if (resultdata.status)?? && (resultdata.status) == '1'>
-		                		<input type="radio" name="status" value="1" lay-skin="primary" title="是" checked="checked">
-			                	<input type="radio" name="status" value="2" lay-skin="primary" title="否">
-		                	</#if>
-		                	<#if (resultdata.status)?? && (resultdata.status) == '2'>
-		                		<input type="radio" name="status" value="1" lay-skin="primary" title="是">
-			                	<input type="radio" name="status" value="2" lay-skin="primary" title="否" checked="checked">
-		                	</#if>
-		                	<#if !(resultdata.status)??>
-		                		<input type="radio" name="status" value="1" lay-skin="primary" title="是">
-			                	<input type="radio" name="status" value="2" lay-skin="primary" title="否">
-		                	</#if>
+		                	
+	                		<input type="radio" name="status" value="1" lay-skin="primary" title="是" >
+		                	<input type="radio" name="status" value="2" lay-skin="primary" title="否" >
 			                
 		                </div>
 	                </div>
@@ -99,53 +100,85 @@
 
 				});
 		</script>
-		<script>
-			
-			initParentMenu();
-			
-			/* 初始化父菜单选项 */
-			function initParentMenu(){
-				$.ajax({
-					type: "POST", //GET或POST,
-					async:true, //默认设置为true，所有请求均为异步请求。
-					url: "${base}/admin/menu/menuList/json",
-					data: {},
-					dataType: "json", //xml、html、script、jsonp、text
-					success: function(dataResult) {
-						if(dataResult && dataResult.status == 'success'){
-							console.log("data" + JSON.stringify(dataResult.data));
-							appendOption(dataResult.data);
-						}else{
-							layer.alert('初始化失败', {icon: 5});
-						}
-					},
-					error:function(){
-						layer.alert('初始化失败', {icon: 5});
-					},
-				});
-			}
-			
-			function appendOption(data){
-				var selectId = "${(resultdata.parentId)!''}";
-				$("#parentId").html("");
-				var options = '<option value="">直接选择或搜索选择</option>';
-				$("#parentId").append(options);
-				$.each(data, function(index,menu){
-					if(selectId == menu.id){
-						$("#parentId").append('<option selected="selected" value="' + menu.id + '">' + menu.name + '</option>');
-					}else{
-						$("#parentId").append('<option value="' + menu.id + '">' + menu.name + '</option>');
+		
+		<script type="text/javascript">
+			var setting = {
+				check: {
+					enable: true,
+					chkStyle: "radio",
+	                radioType: "all"
+				},
+				view: {
+					dblClickExpand: false
+				},
+				data: {
+					simpleData: {
+						enable: true
 					}
-				});
-				//ajax动态加载数据后,需要重新渲染form表单
-				layui.use('form', function(){
-				   var form = layui.form;
-				   form.render();
-				});
+				},
+				callback: {
+					beforeClick: beforeClick,
+					onCheck: onCheck
+				}
+			};
+	
+			var zNodes =[
 				
+			 ];
+			
+			<#if (resultdata??) && (resultdata?size>0)>
+		    	<#list resultdata.data as menu>
+			    	var node = {};
+			    	var url = "${(menu.url)!''}";
+			    	if(!url){
+			    		node.id = "${(menu.id)!''}";
+						node.pId = "${(menu.parentId)!''}";
+						node.name = "${(menu.name)!''}";
+						node.open = true;
+			    	} else {
+						node.id = "${(menu.id)!''}";
+						node.pId = "${(menu.parentId)!''}";
+						node.name = "${(menu.name)!''}";
+					}
+					zNodes.push(node);
+		    	</#list>
+		    </#if>
+			
+			function beforeClick(treeId, treeNode) {
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				zTree.checkNode(treeNode, !treeNode.checked, null, true);
+				return false;
 			}
 			
+			function onCheck(e, treeId, treeNode) {
+				console.log(treeNode.id);
+				console.log(treeNode.name);
+				var cityObj = $("#citySel");
+				cityObj.val(treeNode.name);
+				$("#parentId").val(treeNode.id);
+				/* cityObj.attr("value", v);
+				console.log("ids: " + ids); */
+			}
+	
+			function showMenu() {
+				$("#menuContent").slideDown("fast");
+				$("body").bind("mousedown", onBodyDown);
+			}
+			function hideMenu() {
+				$("#menuContent").fadeOut("fast");
+				$("body").unbind("mousedown", onBodyDown);
+			}
+			function onBodyDown(event) {
+				if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+					hideMenu();
+				}
+			}
+	
+			$(document).ready(function(){
+				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			});
 		</script>
+		
 	</body>
 
 </html>

@@ -15,9 +15,11 @@
 			jdbcType="VARCHAR" />
 		<result column="updateDate" property="updatedate"
 			jdbcType="TIMESTAMP" />
+		<result column="active" property="active"
+			jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, roleName, bewrite, createUser, createDate, updateUser, updateDate
+		id, roleName, bewrite, createUser, createDate, updateUser, updateDate, active
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -33,11 +35,11 @@
 	<insert id="insert" parameterType="com.example.demo.domain.Role">
 		insert into admin_role (id, roleName, bewrite,
 		createUser, createDate, updateUser,
-		updateDate)
+		updateDate, active)
 		values (#{id,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR},
 		#{bewrite,jdbcType=VARCHAR},
 		#{createuser,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR},
-		#{updatedate,jdbcType=TIMESTAMP})
+		#{updatedate,jdbcType=TIMESTAMP}, #{active,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective"
 		parameterType="com.example.demo.domain.Role">
@@ -64,6 +66,9 @@
 			<if test="updatedate != null">
 				updateDate,
 			</if>
+			<if test="active != null">
+				active,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -86,6 +91,9 @@
 			</if>
 			<if test="updatedate != null">
 				#{updatedate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="active != null">
+				#{active,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -111,6 +119,9 @@
 			<if test="updatedate != null">
 				updateDate = #{updatedate,jdbcType=TIMESTAMP},
 			</if>
+			<if test="active != null">
+				active = #{active,jdbcType=VARCHAR},
+			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
@@ -122,7 +133,8 @@
 		createUser = #{createuser,jdbcType=VARCHAR},
 		createDate = #{createdate,jdbcType=TIMESTAMP},
 		updateUser = #{updateuser,jdbcType=VARCHAR},
-		updateDate = #{updatedate,jdbcType=TIMESTAMP}
+		updateDate = #{updatedate,jdbcType=TIMESTAMP},
+		active = #{active,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 </mapper>

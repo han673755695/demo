@@ -17,11 +17,12 @@
 		<result column="sort" property="sort" jdbcType="VARCHAR" />
 		<result column="url" property="url" jdbcType="VARCHAR" />
 		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="active" property="active" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<!-- 基础的数据库字段 -->
 	<sql id="Base_Column_List">
-		id, parent_id, create_date, update_date, name, status, sort, menu_type, icon,
+		id, parent_id, create_date, update_date, name, status, sort, menu_type, icon, active,
 		url
 	</sql>
 	
@@ -66,6 +67,7 @@
 		<if test="parentId != null and parentId != '' ">
 			and parent_id = #{parentId,jdbcType=VARCHAR}
 		</if>
+		order by sort asc
 	</select>
 	
 	<!-- 查询数量 -->
@@ -108,10 +110,10 @@
 	<insert id="insert"
 		parameterType="com.example.demo.domain.Menu">
 		insert into admin_menu 
-			(id, parent_id, create_date,update_date, name, status,sort, menu_type, icon, url)
+			(id, parent_id, create_date,update_date, name, status,sort, menu_type, icon, url, active)
 		values 
 			(#{id}, #{parentId},#{createDate},#{updateDate}, 
-				#{name}, #{status},#{sort}, #{menu_type}, #{icon},#{url})
+				#{name}, #{status},#{sort}, #{menu_type}, #{icon},#{url}, #{active})
 	</insert>
 	
 	<!-- 动态添加数据 -->
@@ -149,6 +151,9 @@
 			<if test="url != null">
 				url,
 			</if>
+			<if test="active != active">
+				active,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -180,6 +185,9 @@
 			</if>
 			<if test="url != null">
 				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="active != active">
+				#{active,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -215,6 +223,9 @@
 			<if test="url != null">
 				url = #{url,jdbcType=VARCHAR},
 			</if>
+			<if test="active != active">
+				active = #{active,jdbcType=VARCHAR},
+			</if>
 		</set>
 		WHERE
 		id=#{id,jdbcType=VARCHAR}
@@ -233,7 +244,8 @@
 		sort = #{sort,jdbcType=VARCHAR},
 		menu_type = #{menuType,jdbcType=VARCHAR},
 		icon = #{icon,jdbcType=VARCHAR},
-		url = #{url,jdbcType=VARCHAR}
+		url = #{url,jdbcType=VARCHAR},
+		active = #{active,jdbcType=VARCHAR}
 		WHERE
 		id=#{id,jdbcType=VARCHAR}
 	</update>

@@ -3,7 +3,7 @@ package com.example.demo.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Role implements Serializable{
+public class Role implements Serializable {
 	private String id;
 
 	private String rolename;
@@ -17,6 +17,8 @@ public class Role implements Serializable{
 	private String updateuser;
 
 	private Date updatedate;
+
+	private String active;
 
 	public String getId() {
 		return id;
@@ -74,9 +76,19 @@ public class Role implements Serializable{
 		this.updatedate = updatedate;
 	}
 
+	public String getActive() {
+		return active;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
 		return "Role [id=" + id + ", rolename=" + rolename + ", bewrite=" + bewrite + ", createuser=" + createuser
-				+ ", createdate=" + createdate + ", updateuser=" + updateuser + ", updatedate=" + updatedate + "]";
+				+ ", createdate=" + createdate + ", updateuser=" + updateuser + ", updatedate=" + updatedate
+				+ ", active=" + active + "]";
 	}
+
 }

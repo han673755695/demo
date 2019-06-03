@@ -1,117 +1,140 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.demo.mapper.UserRoleMapper" >
-  <resultMap id="BaseResultMap" type="com.example.demo.domain.UserRole" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="userId" property="userid" jdbcType="VARCHAR" />
-    <result column="roleId" property="roleid" jdbcType="VARCHAR" />
-    <result column="createUser" property="createuser" jdbcType="VARCHAR" />
-    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
-    <result column="updateUser" property="updateuser" jdbcType="VARCHAR" />
-    <result column="updateDate" property="updatedate" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, userId, roleId, createUser, createDate, updateUser, updateDate
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from admin_user_role
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from admin_user_role
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="com.example.demo.domain.UserRole" >
-    insert into admin_user_role (id, userId, roleId, 
-      createUser, createDate, updateUser, 
-      updateDate)
-    values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR}, 
-      #{createuser,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, 
-      #{updatedate,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.demo.domain.UserRole" >
-    insert into admin_user_role
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="userid != null" >
-        userId,
-      </if>
-      <if test="roleid != null" >
-        roleId,
-      </if>
-      <if test="createuser != null" >
-        createUser,
-      </if>
-      <if test="createdate != null" >
-        createDate,
-      </if>
-      <if test="updateuser != null" >
-        updateUser,
-      </if>
-      <if test="updatedate != null" >
-        updateDate,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="roleid != null" >
-        #{roleid,jdbcType=VARCHAR},
-      </if>
-      <if test="createuser != null" >
-        #{createuser,jdbcType=VARCHAR},
-      </if>
-      <if test="createdate != null" >
-        #{createdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateuser != null" >
-        #{updateuser,jdbcType=VARCHAR},
-      </if>
-      <if test="updatedate != null" >
-        #{updatedate,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.domain.UserRole" >
-    update admin_user_role
-    <set >
-      <if test="userid != null" >
-        userId = #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="roleid != null" >
-        roleId = #{roleid,jdbcType=VARCHAR},
-      </if>
-      <if test="createuser != null" >
-        createUser = #{createuser,jdbcType=VARCHAR},
-      </if>
-      <if test="createdate != null" >
-        createDate = #{createdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateuser != null" >
-        updateUser = #{updateuser,jdbcType=VARCHAR},
-      </if>
-      <if test="updatedate != null" >
-        updateDate = #{updatedate,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.demo.domain.UserRole" >
-    update admin_user_role
-    set userId = #{userid,jdbcType=VARCHAR},
-      roleId = #{roleid,jdbcType=VARCHAR},
-      createUser = #{createuser,jdbcType=VARCHAR},
-      createDate = #{createdate,jdbcType=TIMESTAMP},
-      updateUser = #{updateuser,jdbcType=VARCHAR},
-      updateDate = #{updatedate,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
+<mapper namespace="com.example.demo.mapper.UserRoleMapper">
+	<resultMap id="BaseResultMap"
+		type="com.example.demo.domain.UserRole">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="userId" property="userid" jdbcType="VARCHAR" />
+		<result column="roleId" property="roleid" jdbcType="VARCHAR" />
+		<result column="createUser" property="createuser"
+			jdbcType="VARCHAR" />
+		<result column="createDate" property="createdate"
+			jdbcType="TIMESTAMP" />
+		<result column="updateUser" property="updateuser"
+			jdbcType="VARCHAR" />
+		<result column="updateDate" property="updatedate"
+			jdbcType="TIMESTAMP" />
+		<result column="active" property="active" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, roleId, createUser, createDate, updateUser, updateDate,
+		active
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from admin_user_role
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from admin_user_role
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.example.demo.domain.UserRole">
+		insert into admin_user_role (id, userId, roleId,
+		createUser, createDate, updateUser,
+		updateDate, active)
+		values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR},
+		#{roleid,jdbcType=VARCHAR},
+		#{createuser,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR},
+		#{updatedate,jdbcType=TIMESTAMP}, #{active,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.example.demo.domain.UserRole">
+		insert into admin_user_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userid != null">
+				userId,
+			</if>
+			<if test="roleid != null">
+				roleId,
+			</if>
+			<if test="createuser != null">
+				createUser,
+			</if>
+			<if test="createdate != null">
+				createDate,
+			</if>
+			<if test="updateuser != null">
+				updateUser,
+			</if>
+			<if test="updatedate != null">
+				updateDate,
+			</if>
+			<if test="active != null">
+				active,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="userid != null">
+				#{userid,jdbcType=VARCHAR},
+			</if>
+			<if test="roleid != null">
+				#{roleid,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				#{createuser,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				#{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateuser != null">
+				#{updateuser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedate != null">
+				#{updatedate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="active != null">
+				#{active,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.example.demo.domain.UserRole">
+		update admin_user_role
+		<set>
+			<if test="userid != null">
+				userId = #{userid,jdbcType=VARCHAR},
+			</if>
+			<if test="roleid != null">
+				roleId = #{roleid,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				createUser = #{createuser,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				createDate = #{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateuser != null">
+				updateUser = #{updateuser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedate != null">
+				updateDate = #{updatedate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="active != null">
+				active = #{active,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.example.demo.domain.UserRole">
+		update admin_user_role
+		set userId = #{userid,jdbcType=VARCHAR},
+		roleId = #{roleid,jdbcType=VARCHAR},
+		createUser = #{createuser,jdbcType=VARCHAR},
+		createDate = #{createdate,jdbcType=TIMESTAMP},
+		updateUser = #{updateuser,jdbcType=VARCHAR},
+		updateDate = #{updatedate,jdbcType=TIMESTAMP},
+		active = #{active,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
 </mapper>

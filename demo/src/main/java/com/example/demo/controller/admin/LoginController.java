@@ -33,7 +33,6 @@ public class LoginController {
 	
 	@RequestMapping("/toLogin")
 	public String toLogin(Model model,HttpServletRequest request) {
-		model.addAttribute("name", "张三");
 		
 		logger.info("进入登陆页面");
 		

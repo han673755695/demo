@@ -24,6 +24,8 @@ public class Menu implements Serializable {
 
 	private String icon;
 
+	private String active;
+
 	public String getIcon() {
 		return icon;
 	}
@@ -104,11 +106,19 @@ public class Menu implements Serializable {
 		this.url = url == null ? null : url.trim();
 	}
 
+	public String getActive() {
+		return active;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
+	}
+
 	@Override
 	public String toString() {
 		return "Menu [id=" + id + ", parentId=" + parentId + ", createDate=" + createDate + ", updateDate=" + updateDate
 				+ ", name=" + name + ", menuType=" + menuType + ", status=" + status + ", sort=" + sort + ", url=" + url
-				+ ", icon=" + icon + "]";
+				+ ", icon=" + icon + ", active=" + active + "]";
 	}
 
 }

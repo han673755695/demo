@@ -53,7 +53,8 @@ public class MenuController {
 	@RequestMapping("/menuList")
 	public String menuList(Model model, HttpServletRequest request) {
 		logger.info("获取菜单list");
-		ResultData menuListJson = menuListJson(model, request);
+		Menu menu = new Menu();
+		ResultData menuListJson = list(model, request, menu);
 		model.addAttribute(ResultData.DATAKEY, menuListJson);
 		return "/platform/menu/menuList";
 	}
@@ -105,7 +106,8 @@ public class MenuController {
 	@RequestMapping("/toSaveMenu")
 	public String toSaveMenu(Model model, HttpServletRequest request, Menu menu) {
 		logger.info("添加菜单页面");
-		logger.info(menu.toString());
+		ResultData menuListJson = list(model, request, menu);
+		model.addAttribute(ResultData.DATAKEY, menuListJson);
 		return "/platform/menu/menuAdd";
 	}
 	
@@ -218,13 +220,14 @@ public class MenuController {
 				return success;
 			}
 			Menu result = menuService.selectByPrimaryKey(id);
+			Map<String,Object> dataMap = new HashMap();
+			if (!"-1".equals(result.getParentId())) {
+				Menu parentMenu = menuService.selectByPrimaryKey(result.getParentId());
+				dataMap.put("parentName", parentMenu.getName());
+				success.setMapData(dataMap);
+			}
+			
 			success.setData(result);
-			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY.getValue())) {
-				redisTemplate.delete(RedisKeyEnum.MENUKEY.getValue());
-			}
-			if(redisTemplate.hasKey(RedisKeyEnum.MENUKEY_ALL.getValue())) {
-				redisTemplate.delete(RedisKeyEnum.MENUKEY_ALL.getValue());
-			}
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
 			success.setMessage(e.getMessage());

@@ -27,4 +27,26 @@ public class CommonEunm {
 		}
 		
 	}
+	
+	
+	/**
+	 * 是否可用
+	 * @author my
+	 *
+	 */
+	public static enum Active{
+		可用("1"),不可用("2");
+		private String value;
+		private Active(String value){
+			this.value = value;
+		}
+		public String getValue() {
+			return value;
+		}
+		public void setValue(String value) {
+			this.value = value;
+		}
+		
+	}
+	
 }
