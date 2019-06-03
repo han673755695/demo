@@ -1,7 +1,11 @@
 package com.example.demo.dao;
 
-import com.example.demo.domain.Role;
+import org.springframework.stereotype.Repository;
 
+import com.example.demo.domain.Role;
+import com.example.demo.domain.RoleMenu;
+
+@Repository
 public interface RoleMapper {
     int deleteByPrimaryKey(String id);
 
@@ -14,4 +18,8 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+
+	void deleteRoleMenu(String roleId);
+
+	int insertRoleMenu(RoleMenu roleMenu);
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.RoleMapper;
 import com.example.demo.domain.Role;
+import com.example.demo.domain.RoleMenu;
 import com.example.demo.service.IRoleService;
 
 @Service
@@ -70,6 +71,26 @@ public class RoleServiceImpl implements IRoleService {
 	public int updateByPrimaryKey(Role record) {
 		try {
 			return roleMapper.updateByPrimaryKey(record);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	@Override
+	public void deleteRoleMenu(String roleId) {
+		try {
+			roleMapper.deleteRoleMenu(roleId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	@Override
+	public int insertRoleMenu(RoleMenu roleMenu) {
+		try {
+			return roleMapper.insertRoleMenu(roleMenu);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();

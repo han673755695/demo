@@ -59,7 +59,9 @@
 					</div>
 					<div class="layui-form-item">
 						<label for="L_repass" class="layui-form-label"></label>
-						<button class="layui-btn" lay-filter="add" id="sub" lay-submit="">提交</button></div>
+						<button class="layui-btn" lay-filter="add" id="sub" lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -88,11 +90,11 @@
 											xadmin.father_reload();
 										});
 									}else{
-										layer.alert('保存失败555', {icon: 5});
+										layer.alert('保存失败', {icon: 5});
 									}
 								},
 								error:function(){
-									layer.alert('保存失败6666', {icon: 5});
+									layer.alert('保存失败', {icon: 5});
 								}
 							});
 							return false;

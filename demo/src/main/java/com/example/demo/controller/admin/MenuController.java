@@ -281,6 +281,8 @@ public class MenuController {
 			}
 			
 		} catch (Exception e) {
+			success.setStatus(ResultData.ERROR);
+			success.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
 		return success;
