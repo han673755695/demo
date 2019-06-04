@@ -37,4 +37,7 @@ public interface IMenuService {
     
     //根据用户id获取该用户的权限
     List<Menu> selectByUserId(String userId);
+    
+  //根据用户角色id获取用户角色的权限
+    List<Menu> selectByUserRole(String roleId);
 }

@@ -1,5 +1,7 @@
 package com.example.demo.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.Role;
@@ -22,4 +24,6 @@ public interface RoleMapper {
 	void deleteRoleMenu(String roleId);
 
 	int insertRoleMenu(RoleMenu roleMenu);
+	
+	List<Role> selectListByName(Role role);
 }

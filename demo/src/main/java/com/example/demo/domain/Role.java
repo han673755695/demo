@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Role implements Serializable {
 	private String id;
@@ -19,6 +20,8 @@ public class Role implements Serializable {
 	private Date updatedate;
 
 	private String active;
+	
+	private List<Menu> menuList;
 
 	public String getId() {
 		return id;
@@ -82,6 +85,14 @@ public class Role implements Serializable {
 
 	public void setActive(String active) {
 		this.active = active;
+	}
+
+	public List<Menu> getMenuList() {
+		return menuList;
+	}
+
+	public void setMenuList(List<Menu> menuList) {
+		this.menuList = menuList;
 	}
 
 	@Override

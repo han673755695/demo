@@ -267,7 +267,18 @@
 		AND rm.menuId = m.id
 	</select>
 	
-	
+	<!-- 根据用户id获取该用户的权限 -->
+	<select id="selectByUserRole" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+			m.*
+		FROM
+			admin_role_menu rm,
+			admin_menu m
+		WHERE
+		rm.roleId = #{id,jdbcType=VARCHAR}
+		AND rm.menuId = m.id
+	</select>
 	
 	
 </mapper>

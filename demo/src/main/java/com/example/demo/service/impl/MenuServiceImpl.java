@@ -124,4 +124,15 @@ public class MenuServiceImpl implements IMenuService {
 		}
 	}
 
+	@Override
+	public List<Menu> selectByUserRole(String roleId) {
+		try {
+
+			return menuMapper.selectByUserRole(roleId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("修改数据失败");
+		}
+	}
+
 }

@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,6 +93,16 @@ public class RoleServiceImpl implements IRoleService {
 	public int insertRoleMenu(RoleMenu roleMenu) {
 		try {
 			return roleMapper.insertRoleMenu(roleMenu);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	@Override
+	public List<Role> selectListByName(Role role) {
+		try {
+			return roleMapper.selectListByName(role);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();

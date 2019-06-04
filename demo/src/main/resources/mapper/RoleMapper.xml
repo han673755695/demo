@@ -28,6 +28,20 @@
 		from admin_role
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
+	
+	
+	<select id="selectListByName" resultMap="BaseResultMap"
+		parameterType="Role">
+		select
+		<include refid="Base_Column_List" />
+		from admin_role
+		where 1=1
+		<if test="rolename != null">
+			rolename like '%' + #{rolename,jdbcType=VARCHAR} + '%'
+		</if>
+	</select>
+	
+	
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from admin_role
 		where id = #{id,jdbcType=VARCHAR}
