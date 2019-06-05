@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+	<meta charset="UTF-8">
+	<#include "../common/head.html"/>
+	<@aHead title="后台登录-X-admin2.2" />
+	<link rel="stylesheet" href="${base}/platform/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link rel="stylesheet" href="${base}/platform/zTree/css/demo.css" type="text/css">
+	<script type="text/javascript" src="${base}/platform/zTree/js/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="${base}/platform/zTree/js/jquery.ztree.excheck-3.5.js"></script>
+	<script type="text/javascript" src="${base}/platform/zTree/js/fuzzysearch.js"></script>
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row">
+				<form class="layui-form">
+					<div class="layui-form-item">
+						<label for="username" class="layui-form-label">
+                            <span class="x-red">*</span>角色名称</label>
+						<div class="layui-input-inline">
+							<input type="text" id="rolename" name="rolename" value='${(roleData.rolename)!""}' lay-verify="required" autocomplete="off" class="layui-input"></div>
+							<input type="hidden" name="id" value='${(roleData.id)!""}'/>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">选择权限菜单</label>
+						<div class="layui-input-inline">
+							<input type="text" id="citySel" placeholder="选择菜单" readonly class="layui-input" onclick="showMenu()">
+							<input type="hidden" id="menuIds" name="menuIds"/>
+						</div>
+					</div>
+					<div id="menuContent" class="menuContent" style="display:none; position: absolute; left: 126px; top: 83px; z-index: 5; background-color: rgb(255, 255, 253);">
+						<ul id="treeDemo" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
+					</div>
+					<div class="layui-form-item">
+		                <label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
+		                <div class="layui-input-block">
+	                		<input type="radio" name="active" value="1" lay-skin="primary" title="是" >
+		                	<input type="radio" name="active" value="2" lay-skin="primary" title="否" >
+		                </div>
+	                </div>
+					<div class="layui-form-item layui-form-text">
+						<label for="desc" class="layui-form-label">描述</label>
+						<div class="layui-input-block">
+							<textarea placeholder="请输入内容" id="bewrite" name="bewrite" class="layui-textarea">${(roleData.bewrite)!''}</textarea>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label for="L_repass" class="layui-form-label"></label>
+						<button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script>
+			layui.use(['form', 'layer'],
+				function() {
+					$ = layui.jquery;
+					var form = layui.form,
+						layer = layui.layer;
+
+					//自定义验证规则
+					form.verify({
+						nikename: function(value) {
+							if(value.length < 5) {
+								return '昵称至少得5个字符啊';
+							}
+						},
+						pass: [/(.+){6,12}$/, '密码必须6到12位'],
+						repass: function(value) {
+							if($('#L_pass').val() != $('#L_repass').val()) {
+								return '两次密码不一致';
+							}
+						}
+					});
+					
+					
+					var active = '${(roleData.active)!""}'
+					if(active == "1"){
+						$("input[name=active][value=1]").attr("checked", true);
+	                                   
+					}else if(active == "2"){
+						$("input[name=active][value=2]").attr("checked", true);
+					}
+					form.render("radio"); //更新全部  
+
+					//监听提交
+					form.on('submit(add)',
+						function(dataJson) {
+							console.log(dataJson);
+							$.ajax({
+								type: "POST", //GET或POST,
+								async:true, //默认设置为true，所有请求均为异步请求。
+								url: "${base}/admin/role/saveRole",
+								data: dataJson.field,
+								dataType: "json", //xml、html、script、jsonp、text
+								success: function(dataResult) {
+									if(dataResult && dataResult.status == 'success'){
+										layer.alert("操作成功", {icon: 6},function() {
+											//关闭当前frame
+											xadmin.close();
+											// 可以对父窗口进行刷新 
+											xadmin.father_reload();
+										});
+									}else{
+										layer.alert('保存失败', {icon: 5});
+									}
+								},
+								error:function(){
+									layer.alert('保存失败', {icon: 5});
+								}
+							});
+							return false;
+						});
+
+				});
+			
+		</script>
+		<script type="text/javascript">
+			
+			var menuName=[];
+			var menuId=[];
+			var id = $("input[name=id]").val();
+			if(id){
+				<#if ((roleData.menuList)??) && ((roleData.menuList)?size>0)>
+			    	<#list roleData.menuList as menu>
+		    			menuName.push("${(menu.name)!''}");
+		    			menuId.push("${(menu.id)!''}");
+			    	</#list>
+			    </#if>
+			}
+		
+			var setting = {
+				check: {
+					enable: true
+				},
+				view: {
+					dblClickExpand: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {
+					beforeClick: beforeClick,
+					onCheck: onCheck
+				}
+			};
+	
+			var zNodes =[
+				
+			 ];
+			
+			<#if (resultdata??) && (resultdata?size>0)>
+		    	<#list resultdata as menu>
+			    	var node = {};
+			    	var url = "${(menu.url)!''}";
+			    	if(!url){
+			    		node.id = "${(menu.id)!''}";
+						node.pId = "${(menu.parentId)!''}";
+						node.name = "${(menu.name)!''}";
+						node.open = true;
+			    	} else {
+						node.id = "${(menu.id)!''}";
+						node.pId = "${(menu.parentId)!''}";
+						node.name = "${(menu.name)!''}";
+					}
+					zNodes.push(node);
+		    	</#list>
+		    </#if>
+			
+			function beforeClick(treeId, treeNode) {
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				zTree.checkNode(treeNode, !treeNode.checked, null, true);
+				return false;
+			}
+			
+			function onCheck(e, treeId, treeNode) {
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+				nodes = zTree.getCheckedNodes(true),
+				ids = "",
+				v = "";
+				for (var i=0, l=nodes.length; i<l; i++) {
+					v += nodes[i].name + ",";
+					ids += nodes[i].id + ",";
+				}
+				if (v.length > 0 ) v = v.substring(0, v.length-1);
+				if (ids.length > 0 ) ids = ids.substring(0, ids.length-1);
+				var cityObj = $("#citySel");
+				cityObj.val(v);
+				$("#menuIds").val(ids);
+			}
+	
+			function showMenu() {
+				$("#menuContent").slideDown("fast");
+				$("body").bind("mousedown", onBodyDown);
+			}
+			function hideMenu() {
+				$("#menuContent").fadeOut("fast");
+				$("body").unbind("mousedown", onBodyDown);
+			}
+			function onBodyDown(event) {
+				if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+					hideMenu();
+				}
+			}
+	
+			$(function(){
+				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+				fuzzySearch('treeDemo','#citySel',null,true); //初始化模糊搜索方法
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo")
+				if(menuId.length > 0){
+					$.each(menuId,function(index,id){
+						var treeNode = zTree.getNodesByParam("id",id);
+						zTree.checkNode(treeNode[0],true,false,true);
+					})
+				}
+			});
+			
+				
+		</script>
+		
+	</body>
+
+</html>
