@@ -1,14 +1,13 @@
 package com.example.demo.controller.admin;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
+import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
+import com.example.demo.domain.UserRole;
+import com.example.demo.eunm.CommonEunm;
+import com.example.demo.service.IRoleService;
+import com.example.demo.service.IUserRoleService;
 import com.example.demo.service.IUserService;
-import com.example.demo.utils.DateUtils;
 import com.example.demo.utils.RequestParamUtils;
 import com.example.demo.utils.UUIDUtils;
 
@@ -40,6 +43,10 @@ public class ConsumerController {
 
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IRoleService roleService;
+	@Autowired
+	private IUserRoleService userRoleService;
 
 	/**
 	 * 会员列表
@@ -105,6 +112,10 @@ public class ConsumerController {
 		logger.info("进入编辑用户页面");
 		ResultData consumerListJson = consumerEditJson(model, request, user);
 		model.addAttribute(ResultData.DATAKEY, consumerListJson.getData());
+		//获取角色列表
+		Role role = new Role();
+		List<Role> roleList = roleService.selectListByName(role);
+		model.addAttribute("roleList", roleList);
 		return "/platform/consumer/consumerAdd";
 	}
 
@@ -146,6 +157,10 @@ public class ConsumerController {
 	@RequestMapping("/toConsumerAdd")
 	public String toConsumerAdd(Model model, HttpServletRequest request) {
 		logger.info("进入添加用户页面");
+		//获取角色列表
+		Role role = new Role();
+		List<Role> roleList = roleService.selectListByName(role);
+		model.addAttribute("roleList", roleList);
 		return "/platform/consumer/consumerAdd";
 	}
 
@@ -160,6 +175,9 @@ public class ConsumerController {
 	@RequestMapping("/consumerAdd")
 	public ResultData consumerAdd(Model model, HttpServletRequest request, User user) {
 		ResultData success = ResultData.getSuccess();
+		String rolename = request.getParameter("L_rolename");
+		
+		User loginUser = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
 		try {
 			if (!StringUtils.isEmpty(user.getId())) {
 				// 修改
@@ -174,6 +192,14 @@ public class ConsumerController {
 				user.setCreateDate(new Date());
 				user.setUpdateDate(new Date());
 				int id = userService.insertSelective(user);
+				UserRole userRole = new UserRole();
+				userRole.setId(UUIDUtils.getUUID());
+				userRole.setActive(CommonEunm.Active.可用.getValue());
+				userRole.setCreatedate(new Date());
+				userRole.setCreateuser(loginUser.getId());
+				userRole.setUserid(user.getId());
+				userRole.setRoleid(rolename);
+				userRoleService.insert(userRole);
 				success.setData(id);
 			}
 
