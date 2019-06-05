@@ -155,6 +155,14 @@ public class MenuController {
 		return success;
 	}
 	
+	
+	/**
+	 * 删除菜单
+	 * @param model
+	 * @param request
+	 * @param ids
+	 * @return
+	 */
 	@RequestMapping("/delMenu")
 	@ResponseBody
 	public ResultData delMenu(Model model, HttpServletRequest request, String ids) {

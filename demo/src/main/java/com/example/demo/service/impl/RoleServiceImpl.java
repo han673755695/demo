@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.RoleMapper;
+import com.example.demo.dao.RoleMenuMapper;
 import com.example.demo.domain.Role;
 import com.example.demo.domain.RoleMenu;
 import com.example.demo.service.IRoleService;
@@ -15,6 +16,8 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Autowired
 	private RoleMapper roleMapper;
+	@Autowired
+	private RoleMenuMapper roleMenuMapper;
 	
 	/**
 	 * 根据主键删除数据
@@ -22,6 +25,10 @@ public class RoleServiceImpl implements IRoleService {
 	@Override
 	public int deleteByPrimaryKey(String id) {
 		try {
+			List<RoleMenu> roleMenuList = roleMenuMapper.queryByRoleId(id);
+			for (RoleMenu roleMenu : roleMenuList) {
+				roleMenuMapper.deleteByPrimaryKey(roleMenu.getId());
+			}
 			return roleMapper.deleteByPrimaryKey(id);
 		} catch (Exception e) {
 			e.printStackTrace();
