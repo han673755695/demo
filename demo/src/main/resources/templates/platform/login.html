@@ -29,6 +29,7 @@
 					
 					//监听提交
 					form.on('submit(login)', function(data) {
+						data.field.password = xadmin.md5(data.field.password);
 						console.log("data: " + JSON.stringify(data.field))
 						$.ajax({
 							type: "POST", //GET或POST,
@@ -48,7 +49,7 @@
 							},
 							error:function(dataResult){
 								console.log("dataResult: " + JSON.stringify(dataResult))
-								layer.alert('网络异常', {icon: 5});
+								layer.alert('用户名或密码不正确', {icon: 5});
 							},
 						});
 						
