@@ -80,4 +80,24 @@ public class LoginController {
 	}
 	
 	
+	/**
+	 * 退出登陆
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/logout")
+	@ResponseBody
+	public ResultData logout(Model model, HttpServletRequest request) {
+		ResultData success = ResultData.getSuccess();
+		try {
+			SecurityUtils.getSubject().logout();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("登陆异常");
+		}
+		return success;
+	}
+	
+	
 }

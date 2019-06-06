@@ -46,7 +46,7 @@ public class ShiroConfig {
 		
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		// 退出
-		map.put("/logout", "logout");
+		map.put("/admin/login/logout", "logout");
 		// 静态资源
 		map.put("/platform/**", "anon");
 		// 登陆接口
