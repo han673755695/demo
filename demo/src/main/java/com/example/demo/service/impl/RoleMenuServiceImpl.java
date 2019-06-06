@@ -10,21 +10,21 @@ import com.example.demo.domain.RoleMenu;
 import com.example.demo.service.IRoleMenuService;
 
 @Service
-public class RoleMenuServiceImpl implements IRoleMenuService{
+public class RoleMenuServiceImpl implements IRoleMenuService {
 
 	@Autowired
-	private RoleMenuMapper RoleMenuMapper;
-	
+	private RoleMenuMapper roleMenuMapper;
+
 	@Override
 	public int deleteByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		return roleMenuMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int insert(RoleMenu record) {
 		try {
-			return RoleMenuMapper.insert(record);
+			return roleMenuMapper.insert(record);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -34,7 +34,7 @@ public class RoleMenuServiceImpl implements IRoleMenuService{
 	@Override
 	public int insertSelective(RoleMenu record) {
 		try {
-			return RoleMenuMapper.insertSelective(record);
+			return roleMenuMapper.insertSelective(record);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -43,26 +43,38 @@ public class RoleMenuServiceImpl implements IRoleMenuService{
 
 	@Override
 	public RoleMenu selectByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return roleMenuMapper.selectByPrimaryKey(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	public int updateByPrimaryKeySelective(RoleMenu record) {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return roleMenuMapper.updateByPrimaryKeySelective(record);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	public int updateByPrimaryKey(RoleMenu record) {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return roleMenuMapper.updateByPrimaryKey(record);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	public List<RoleMenu> queryByRoleId(String id) {
 		try {
-			return RoleMenuMapper.queryByRoleId(id);
+			return roleMenuMapper.queryByRoleId(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();

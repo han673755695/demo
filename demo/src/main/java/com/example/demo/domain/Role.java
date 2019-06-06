@@ -20,7 +20,7 @@ public class Role implements Serializable {
 	private Date updatedate;
 
 	private String active;
-	
+
 	private List<Menu> menuList;
 
 	public String getId() {
@@ -99,7 +99,7 @@ public class Role implements Serializable {
 	public String toString() {
 		return "Role [id=" + id + ", rolename=" + rolename + ", bewrite=" + bewrite + ", createuser=" + createuser
 				+ ", createdate=" + createdate + ", updateuser=" + updateuser + ", updatedate=" + updatedate
-				+ ", active=" + active + "]";
+				+ ", active=" + active + ", menuList=" + menuList + "]";
 	}
 
 }

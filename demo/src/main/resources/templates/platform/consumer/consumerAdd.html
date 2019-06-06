@@ -118,9 +118,8 @@
 		<script>
 			if($("#L_id").val()){
 				$("#L_email").attr("disabled","disabled");
-				$("#L_username").attr("disabled","disabled");
-				$("#L_age").attr("disabled","disabled");
 				$("#L_repass").attr("disabled","disabled");
+				$("#L_rolename").val("${(resultdata.roleList[0].id)!''}");
 			}
 		</script>
 	</body>

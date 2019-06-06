@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,14 @@ public class ConsumerController {
 			
 			List<Map<String, Object>> userList = userService.selectBySelective(parameterMap);
 			int totalCount = userService.totalCount(parameterMap);
+			if (!CollectionUtils.isEmpty(userList)) {
+				for (Map<String, Object> map : userList) {
+					List<Role> roleList = userRoleService.queryRoleByUserId(String.valueOf(map.get("id")));
+					map.put("roleList", roleList);
+					System.out.println("roleList:" + roleList);
+				}
+			}
+			
 			page.setTotalCount(totalCount);
 			
 			success.setData(userList);
@@ -138,6 +147,8 @@ public class ConsumerController {
 				return success;
 			}
 			User result = userService.selectByPrimaryKey(id);
+			List<Role> roleList = userRoleService.queryRoleByUserId(id);
+			result.setRoleList(roleList);
 			success.setData(result);
 		} catch (Exception e) {
 			success.setStatus(ResultData.ERROR);
@@ -237,6 +248,7 @@ public class ConsumerController {
 			logger.info(ids);
 			String[] split = ids.split(",");
 			List<String> asList = Arrays.asList(split);
+			//此处为软删除
 			userService.deleteByPrimaryKey(asList);
 
 		} catch (Exception e) {
