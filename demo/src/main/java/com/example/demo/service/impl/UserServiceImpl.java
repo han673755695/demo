@@ -83,12 +83,11 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public int updateByPrimaryKey(User user) {
 		try {
-
+			return userDao.updateByPrimaryKey(user);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
-		return 0;
 	}
 
 	@Override

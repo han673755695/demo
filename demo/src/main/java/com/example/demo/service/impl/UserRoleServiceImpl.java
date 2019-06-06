@@ -1,9 +1,12 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.UserRoleMapper;
+import com.example.demo.domain.Role;
 import com.example.demo.domain.UserRole;
 import com.example.demo.service.IUserRoleService;
 
@@ -71,6 +74,22 @@ public class UserRoleServiceImpl implements IUserRoleService {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
+	}
+
+	
+	/**
+     * 根据用户id获取用户角色列表,一个用户可能对应多个角色
+     * @return
+     */
+	@Override
+	public List<Role> queryRoleByUserId(String userId) {
+		try {
+			return userRoleMapper.queryRoleByUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+		
 	}
 
 }

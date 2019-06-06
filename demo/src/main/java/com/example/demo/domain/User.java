@@ -2,8 +2,9 @@ package com.example.demo.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-public class User implements Serializable{
+public class User implements Serializable {
 	private String id;
 
 	private String name;
@@ -21,6 +22,8 @@ public class User implements Serializable{
 	private String password;
 
 	private String email;
+
+	private List<Role> roleList;
 
 	public String getId() {
 		return id;
@@ -94,11 +97,19 @@ public class User implements Serializable{
 		this.status = status == null ? "1" : status.trim();
 	}
 
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", age=" + age + ", createDate=" + createDate + ", updateDate="
 				+ updateDate + ", hobby=" + hobby + ", status=" + status + ", password=" + password + ", email=" + email
-				+ "]";
+				+ ", roleList=" + roleList + "]";
 	}
 
 }

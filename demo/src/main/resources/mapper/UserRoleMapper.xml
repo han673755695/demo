@@ -137,4 +137,19 @@
 		active = #{active,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
+	
+	<!-- 根据用户id获取用户角色列表,一个用户可能对应多个角色 -->
+	<select id="queryRoleByUserId" resultType="Role"
+		parameterType="java.lang.String">
+		SELECT
+			r.id,
+			r.roleName
+		FROM
+			admin_user_role ur,
+			admin_role r
+		WHERE
+			ur.roleId = r.id
+		AND ur.userId = #{userId,jdbcType=VARCHAR}
+	</select>
+	
 </mapper>

@@ -46,7 +46,7 @@
 	</select>
 	
 	
-	<select id="selectBySelective" resultMap="BaseResultMap"
+	<select id="selectBySelective" resultType="Map"
 		parameterType="Map">
 		select
 		<include refid="Base_Column_List" />
@@ -86,13 +86,14 @@
 	
 	
 	
-	<delete id="deleteByPrimaryKey" parameterType="list">
-		delete from admin_user
+	<update id="deleteByPrimaryKey" parameterType="list">
+		update admin_user
+		set `status` = '2'
 		where id in 
 		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
 			#{id}
 		</foreach>
-	</delete>
+	</update>
 	
 	
 	<insert id="insert"
