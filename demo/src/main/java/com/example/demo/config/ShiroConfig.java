@@ -5,7 +5,9 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -14,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.demo.utils.AdminUrlFilter;
 import com.jagregory.shiro.freemarker.ShiroTags;
+
+import net.sf.ehcache.CacheManager;
 
 @Configuration
 public class ShiroConfig {
@@ -26,13 +30,18 @@ public class ShiroConfig {
 
 	// 权限管理，配置主要是Realm的管理认证
 	@Bean
-	public SecurityManager securityManager() {
+	public SecurityManager securityManager(EhCacheManager ehCacheManager) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		securityManager.setRealm(myShiroRealm());
+		MyShiroRealm myShiroRealm = myShiroRealm();
+		myShiroRealm.setCachingEnabled(true);
+		myShiroRealm.setAuthenticationCachingEnabled(true);
+		myShiroRealm.setAuthorizationCachingEnabled(true);
+		securityManager.setRealm(myShiroRealm);
+		securityManager.setCacheManager(ehCacheManager);
 		return securityManager;
 	}
-	
-	//shiro在页面中使用标签
+
+	// shiro在页面中使用标签
 	@Bean
 	public freemarker.template.Configuration setConfiguration(freemarker.template.Configuration cong) {
 		cong.setSharedVariable("shiro", new ShiroTags());
@@ -44,24 +53,22 @@ public class ShiroConfig {
 	public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
-		
+
 		// 自定义过滤器
-	    Map<String, Filter> filterMap = shiroFilterFactoryBean.getFilters();
-	    filterMap.put("adminUrlFilter", new AdminUrlFilter());
-	    shiroFilterFactoryBean.setFilters(filterMap);
-		
-		
-		
+		Map<String, Filter> filterMap = shiroFilterFactoryBean.getFilters();
+		filterMap.put("adminUrlFilter", new AdminUrlFilter());
+		shiroFilterFactoryBean.setFilters(filterMap);
+
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		// 退出
-		map.put("/admin/login/logout", "logout");
+		//map.put("/admin/login/logout", "logout");
 		// 静态资源
 		map.put("/platform/**", "anon");
 		// 登陆接口
 		map.put("/admin/login/login", "anon");
-		//自定义的拦截器 拦截
-		//map.put("/admin/menu/**", "adminUrlFilter");
-		//map.put("/admin/role/**", "adminUrlFilter");
+		// 自定义的拦截器 拦截
+		// map.put("/admin/menu/**", "adminUrlFilter");
+		// map.put("/admin/role/**", "adminUrlFilter");
 		map.put("/admin/**", "authc");
 		System.out.println("map: " + map);
 		// 登录页面
@@ -81,5 +88,23 @@ public class ShiroConfig {
 		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
 		return authorizationAttributeSourceAdvisor;
 	}
+
+	/**
+	 * 缓存管理器
+	 * 
+	 * @return
+	 */
+	@Bean
+	public EhCacheManager ehCacheManager() {
+		EhCacheManager em = new EhCacheManager();
+		em.setCacheManagerConfigFile("classpath:ehcache.xml");
+		return em;
+	}
+	
+	@Bean
+    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
 
 }

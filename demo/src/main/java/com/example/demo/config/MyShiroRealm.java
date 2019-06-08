@@ -51,10 +51,6 @@ public class MyShiroRealm extends AuthorizingRealm {
 			}
 		}
 		simpleAuthorInfo.addStringPermission("/admin/menu/list");// 给当前用户授权url为hello的权限码
-		Set<String> stringPermissions = simpleAuthorInfo.getStringPermissions();
-		for (String string : stringPermissions) {
-			System.out.println("permissions: " + string);
-		}
 		return simpleAuthorInfo;
 	}
 

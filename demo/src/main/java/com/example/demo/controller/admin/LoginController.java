@@ -87,16 +87,14 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping("/logout")
-	@ResponseBody
-	public ResultData logout(Model model, HttpServletRequest request) {
-		ResultData success = ResultData.getSuccess();
+	public String logout(Model model, HttpServletRequest request) {
 		try {
 			SecurityUtils.getSubject().logout();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("登陆异常");
 		}
-		return success;
+		return "/platform/login";
 	}
 	
 	
