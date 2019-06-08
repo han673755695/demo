@@ -28,7 +28,11 @@ public enum RedisKeyEnum {
 	/**
 	 * 订阅发布主题名称
 	 */
-	MESSAGEPUSH_C("messagepush_c");
+	MESSAGEPUSH_C("messagepush_c"),
+	/**
+	 * redis分布式锁key
+	 */
+	REDIS_LOCK("redis_lock");
 	
 	private String value;
 	

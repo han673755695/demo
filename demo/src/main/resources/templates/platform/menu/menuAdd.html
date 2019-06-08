@@ -27,11 +27,21 @@
 							<input type="text" id="url" name="url" value="${(resultdata.url)!''}" required="" lay-verify="" autocomplete="off" class="layui-input"></div>
 					</div>
 					
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>资源类型</label>
+						<div class="layui-input-inline">
+							<select name="menuType" class="layui-input-inline">
+	                            <option value="1">菜单</option>
+	                            <option value="2">按钮</option>
+	                        </select>
+						</div>
+                    </div>
+					
 					<div class="layui-inline">
 						<label class="layui-form-label">选择父菜单</label>
 						
 						<div class="layui-input-inline">
-							<input type="text" id="citySel" placeholder="选择菜单" readonly required="" lay-verify="" autocomplete="off" class="layui-input" onclick="showMenu()">
+							<input type="text" id="citySel" placeholder="选择父菜单" readonly required="" lay-verify="" autocomplete="off" class="layui-input" onclick="showMenu()">
 							<input type="hidden" id="parentId" name="parentId"/>
 						</div>
 					</div>
@@ -39,8 +49,6 @@
 					<div id="menuContent" class="menuContent" style="display:none; position: absolute; left: 126px; top: 137px; z-index: 5; background-color: rgb(255, 255, 253);">
 						<ul id="treeDemo" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
 					</div>
-					
-					
 					
 					<div class="layui-form-item">
 		                <label class="layui-form-label"><span class="x-red">*</span>是否可用</label>

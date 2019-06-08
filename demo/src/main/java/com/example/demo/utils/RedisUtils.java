@@ -1,5 +1,8 @@
 package com.example.demo.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,7 +14,11 @@ import javax.management.RuntimeErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
+
+import com.example.demo.eunm.RedisKeyEnum;
 
 
 /**
@@ -37,6 +44,37 @@ public class RedisUtils {
 	@PostConstruct
 	public void init() {
 		stringRedisTemplate = strRedisTemplate;
+	}
+	
+	/**
+	  * 获取redis分布式锁
+	 * @param uuid	锁的值
+	 * @param expireTime	过期时间,秒
+	 * @return
+	 */
+	public static boolean getRedisLock(String uuid,long expireTime) {
+		Boolean setIfAbsent = stringRedisTemplate.opsForValue().
+			setIfAbsent(RedisKeyEnum.REDIS_LOCK.getValue(), uuid, expireTime, TimeUnit.SECONDS);
+		return setIfAbsent;
+	}
+	
+	/**
+	  *   解除redis分布式锁
+	 * @param uuid	锁的值,防止解除了其他线程的锁
+	 * @return	
+	 */
+	public static String unRedisLock(String uuid) {
+		//脚本
+		String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end ";
+		//使用默认的脚本执行类
+		DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
+        redisScript.setScriptText(script);
+        //设置返回值类型,只支持long类型
+        redisScript.setResultType(Long.class);
+		
+		Long execute = stringRedisTemplate.execute(redisScript, Collections.singletonList(RedisKeyEnum.REDIS_LOCK.getValue()), uuid);
+		
+		return execute.toString();
 	}
 
 	/**

@@ -3,6 +3,7 @@ package com.example.demo.config;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -50,6 +51,10 @@ public class MyShiroRealm extends AuthorizingRealm {
 			}
 		}
 		simpleAuthorInfo.addStringPermission("/admin/menu/list");// 给当前用户授权url为hello的权限码
+		Set<String> stringPermissions = simpleAuthorInfo.getStringPermissions();
+		for (String string : stringPermissions) {
+			System.out.println("permissions: " + string);
+		}
 		return simpleAuthorInfo;
 	}
 

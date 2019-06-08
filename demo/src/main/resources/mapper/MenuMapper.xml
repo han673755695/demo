@@ -67,6 +67,9 @@
 		<if test="parentId != null and parentId != '' ">
 			and parent_id = #{parentId,jdbcType=VARCHAR}
 		</if>
+		<if test="menuType != null and menuType != '' ">
+			and menu_type = #{menuType,jdbcType=VARCHAR}
+		</if>
 		order by sort asc
 	</select>
 	

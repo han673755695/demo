@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.util.StringUtils;
 import com.example.demo.common.ResultData;
 import com.example.demo.eunm.RedisKeyEnum;
 import com.example.demo.utils.DateUtils;
@@ -119,24 +120,34 @@ public class RedisController {
 	@ResponseBody
 	public ResultData getLock() {
 		ResultData success = ResultData.getSuccess();
-		String valueOf = String.valueOf(new Date().getTime() + 10000);
+		String uuid = UUIDUtils.getUUID();
 		try {
-			Boolean setIfAbsent = stringRedisTemplate.opsForValue().setIfAbsent("name", valueOf, 10l, TimeUnit.SECONDS);
-			if (setIfAbsent) {
-				logger.info("获取锁");
-				
-				logger.info("执行完毕业务");
-				
-			}else {
-				logger.info("获取锁失败");
+			//定义获取锁的次数
+			//获取请求获取锁的超时时间
+			int i = 0;
+			long expireTime = System.currentTimeMillis() + 3000;
+			boolean redisLock = RedisUtils.getRedisLock(uuid, 10l);
+			logger.info("获取锁redisLock: " + redisLock);
+			while (!redisLock && expireTime - System.currentTimeMillis() > 0) {
+				i ++;
+				if (RedisUtils.getRedisLock(uuid, 10l)) {
+					logger.info("执行业务代码");
+					//Thread.sleep(2000l);
+					success.setData(i);
+					return success;
+				}
 			}
 			
-			success.setData(setIfAbsent);
+			logger.info("执行业务代码");
+			Thread.sleep(2000l);
+			success.setData(i);
+			return success;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			logger.info("释放锁");
-			stringRedisTemplate.delete("name");
+			String unRedisLock = RedisUtils.unRedisLock(uuid);
+			logger.info("解除锁unRedisLock: " + unRedisLock);
 		}
 		
 		return success;

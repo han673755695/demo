@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.demo.utils.AdminUrlFilter;
+import com.jagregory.shiro.freemarker.ShiroTags;
 
 @Configuration
 public class ShiroConfig {
@@ -29,6 +30,13 @@ public class ShiroConfig {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		securityManager.setRealm(myShiroRealm());
 		return securityManager;
+	}
+	
+	//shiro在页面中使用标签
+	@Bean
+	public freemarker.template.Configuration setConfiguration(freemarker.template.Configuration cong) {
+		cong.setSharedVariable("shiro", new ShiroTags());
+		return cong;
 	}
 
 	// Filter工厂，设置对应的过滤条件和跳转条件
@@ -51,8 +59,10 @@ public class ShiroConfig {
 		map.put("/platform/**", "anon");
 		// 登陆接口
 		map.put("/admin/login/login", "anon");
+		//自定义的拦截器 拦截
 		//map.put("/admin/menu/**", "adminUrlFilter");
-		map.put("/**", "authc");
+		//map.put("/admin/role/**", "adminUrlFilter");
+		map.put("/admin/**", "authc");
 		System.out.println("map: " + map);
 		// 登录页面
 		shiroFilterFactoryBean.setLoginUrl("/admin/login/toLogin");

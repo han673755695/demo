@@ -58,6 +58,16 @@
 							<input type="text" id="url" name="url" value="" required="" lay-verify="" autocomplete="off" class="layui-input"></div>
 					</div>
 					
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>资源类型</label>
+						<div class="layui-input-inline">
+							<select name="menuType" id="menuType" class="layui-input-inline">
+	                            <option value="1">菜单</option>
+	                            <option value="2">按钮</option>
+	                        </select>
+						</div>
+                    </div>
+					
 					<div class="layui-inline">
 						<label class="layui-form-label">选择父菜单</label>
 						
@@ -114,10 +124,7 @@
 								success: function(dataResult) {
 									if(dataResult && dataResult.status == 'success'){
 										layer.alert("操作成功", {icon: 6},function() {
-											//关闭当前frame
-											xadmin.close();
-											// 可以对父窗口进行刷新 
-											xadmin.father_reload();
+											window.location.reload();
 										});
 									}else{
 										layer.alert('保存失败555', {icon: 5});
@@ -336,6 +343,7 @@
 						$("#url").val(menu.url);
 						$("#parentId").val(menu.parentId);
 						$("#sort").val(menu.sort);
+						$("#menuType").val(menu.menuType);
 						var pName = dataResult.mapData.parentName;
 						if(pName){
 							$("#citySel").val(pName);
