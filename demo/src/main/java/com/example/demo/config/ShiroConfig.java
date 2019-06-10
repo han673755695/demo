@@ -5,19 +5,21 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
-import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.demo.utils.AdminUrlFilter;
 import com.jagregory.shiro.freemarker.ShiroTags;
-
-import net.sf.ehcache.CacheManager;
 
 @Configuration
 public class ShiroConfig {
@@ -30,14 +32,15 @@ public class ShiroConfig {
 
 	// 权限管理，配置主要是Realm的管理认证
 	@Bean
-	public SecurityManager securityManager(EhCacheManager ehCacheManager) {
+	public SecurityManager securityManager() {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		MyShiroRealm myShiroRealm = myShiroRealm();
 		myShiroRealm.setCachingEnabled(true);
 		myShiroRealm.setAuthenticationCachingEnabled(true);
 		myShiroRealm.setAuthorizationCachingEnabled(true);
 		securityManager.setRealm(myShiroRealm);
-		securityManager.setCacheManager(ehCacheManager);
+		securityManager.setSessionManager(sessionManager());
+		securityManager.setCacheManager(cacheManager());
 		return securityManager;
 	}
 
@@ -89,22 +92,61 @@ public class ShiroConfig {
 		return authorizationAttributeSourceAdvisor;
 	}
 
-	/**
-	 * 缓存管理器
-	 * 
-	 * @return
-	 */
-	@Bean
-	public EhCacheManager ehCacheManager() {
-		EhCacheManager em = new EhCacheManager();
-		em.setCacheManagerConfigFile("classpath:ehcache.xml");
-		return em;
-	}
-	
 	@Bean
     public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
 
+	
+	/**
+     * 配置shiro redisManager 使用的是shiro-redis开源插件
+     *
+     * @return
+     */
+    @Bean
+    public RedisManager redisManager() {
+    	RedisManager redisManager = new RedisManager();
+    	redisManager.setHost("192.168.11.132");
+        return redisManager;
+    }
+
+    @Bean
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        RedisSessionDAO redisSessionDao = new RedisSessionDAO();
+        redisSessionDao.setRedisManager(redisManager());
+        sessionManager.setSessionDAO(redisSessionDao);
+        return sessionManager;
+    }
+
+    /**
+     * cacheManager 缓存 redis实现 使用的是shiro-redis开源插件
+     *
+     * @return
+     */
+    public RedisCacheManager cacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        return redisCacheManager;
+    }
+    
+    
+    /**
+	  * 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证
+	  * 配置以下两个bean(DefaultAdvisorAutoProxyCreator和AuthorizationAttributeSourceAdvisor)即可实现此功能
+     */
+    @Bean
+    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        advisorAutoProxyCreator.setProxyTargetClass(true);
+        return advisorAutoProxyCreator;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
+        return authorizationAttributeSourceAdvisor;
+    }
 
 }

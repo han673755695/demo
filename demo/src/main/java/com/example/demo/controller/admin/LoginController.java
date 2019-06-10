@@ -24,24 +24,23 @@ import com.example.demo.utils.RequestParamUtils;
 @Controller
 @RequestMapping("/admin/login")
 public class LoginController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-	
+
 	@Autowired
 	private IUserService userService;
-	
-	
+
 	@RequestMapping("/toLogin")
-	public String toLogin(Model model,HttpServletRequest request) {
-		
+	public String toLogin(Model model, HttpServletRequest request) {
+
 		logger.info("进入登陆页面");
-		
+
 		return "/platform/login";
 	}
-	
-	
+
 	/**
 	 * 登陆方法
+	 * 
 	 * @param model
 	 * @param request
 	 * @return
@@ -50,7 +49,7 @@ public class LoginController {
 	@ResponseBody
 	public ResultData login(Model model, HttpServletRequest request) {
 		ResultData success = ResultData.getSuccess();
-		Map<String,Object> parameterMap = RequestParamUtils.getParameterMap(request);
+		Map<String, Object> parameterMap = RequestParamUtils.getParameterMap(request);
 		String username = (String) parameterMap.get("username");
 		String password = (String) parameterMap.get("password");
 		try {
@@ -64,24 +63,24 @@ public class LoginController {
 				success.setMessage("密码不能为空");
 				return success;
 			}
-			
+
 			// 从SecurityUtils里边创建一个 subject
-	        Subject subject = SecurityUtils.getSubject();
-	        // 在认证提交前准备 token（令牌）
-	        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-	        // 执行认证登陆
-	        subject.login(token);
-			
+			Subject subject = new Subject.Builder().buildSubject();
+			// 在认证提交前准备 token（令牌）
+			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+			// 执行认证登陆
+			subject.login(token);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("登陆异常");
 		}
 		return success;
 	}
-	
-	
+
 	/**
 	 * 退出登陆
+	 * 
 	 * @param model
 	 * @param request
 	 * @return
@@ -89,13 +88,13 @@ public class LoginController {
 	@RequestMapping("/logout")
 	public String logout(Model model, HttpServletRequest request) {
 		try {
-			SecurityUtils.getSubject().logout();
+			Subject buildSubject = new Subject.Builder().buildSubject();
+			buildSubject.logout();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("登陆异常");
 		}
 		return "/platform/login";
 	}
-	
-	
+
 }

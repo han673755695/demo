@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +136,7 @@ public class RoleController {
 			String id = role.getId();
 			String idsStr = request.getParameter("menuIds");
 			
-			User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
+			User user = (User) new Subject.Builder().buildSubject().getSession().getAttribute("user");
 			if (StringUtils.isEmpty(id)) {
 				//保存角色信息
 				String roleId = UUIDUtils.getUUID();

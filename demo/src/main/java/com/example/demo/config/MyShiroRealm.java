@@ -16,6 +16,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -41,7 +42,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
 
 		SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-		Session session = SecurityUtils.getSubject().getSession();
+		Session session = new Subject.Builder().buildSubject().getSession();
 		User user = (User) session.getAttribute("user");
 		List<Menu> menuList = menuService.selectByUserId(user.getId());
 		logger.info("menuList: " + menuList);
@@ -80,7 +81,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 		
 		// 清之前的授权信息
 		super.clearCachedAuthorizationInfo(authcInfo.getPrincipals());
-		SecurityUtils.getSubject().getSession().setAttribute("user", user);
+		new Subject.Builder().buildSubject().getSession().setAttribute("user", user);
 		return authcInfo;
 	}
 
