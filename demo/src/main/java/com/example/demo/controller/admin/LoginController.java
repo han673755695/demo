@@ -1,11 +1,13 @@
 package com.example.demo.controller.admin;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +67,7 @@ public class LoginController {
 			}
 
 			// 从SecurityUtils里边创建一个 subject
-			Subject subject = new Subject.Builder().buildSubject();
+			Subject subject = SecurityUtils.getSubject();
 			// 在认证提交前准备 token（令牌）
 			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 			// 执行认证登陆
@@ -79,22 +81,21 @@ public class LoginController {
 	}
 
 	/**
-	 * 退出登陆
+	 * 退出登陆	shiro拦截退出方法不走这里
 	 * 
 	 * @param model
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/logout")
-	public String logout(Model model, HttpServletRequest request) {
-		try {
-			Subject buildSubject = new Subject.Builder().buildSubject();
-			buildSubject.logout();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("登陆异常");
-		}
-		return "/platform/login";
-	}
+//	@RequestMapping("/logout")
+//	public String logout(Model model, HttpServletRequest request) {
+//		try {
+//			System.out.println("退出登陆");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new RuntimeException("退出异常");
+//		}
+//		return "/platform/login";
+//	}
 
 }

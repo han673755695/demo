@@ -189,7 +189,7 @@ public class ConsumerController {
 		ResultData success = ResultData.getSuccess();
 		String rolename = request.getParameter("L_rolename");
 		
-		User loginUser = (User) new Subject.Builder().buildSubject().getSession().getAttribute("user");
+		User loginUser = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
 		try {
 			if (!StringUtils.isEmpty(user.getId())) {
 				// 修改

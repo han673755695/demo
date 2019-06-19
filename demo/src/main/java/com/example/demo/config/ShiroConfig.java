@@ -64,15 +64,18 @@ public class ShiroConfig {
 
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		// 退出
-		//map.put("/admin/login/logout", "logout");
+		map.put("/admin/login/logout", "logout");
 		// 静态资源
 		map.put("/platform/**", "anon");
 		// 登陆接口
 		map.put("/admin/login/login", "anon");
+		map.put("/admin/login/toLogin", "anon");
+		map.put("/admin/index/toIndex", "anon");
+		map.put("/unauthorized", "anon");
 		// 自定义的拦截器 拦截
-		// map.put("/admin/menu/**", "adminUrlFilter");
+		//map.put("/admin/menu/**", "adminUrlFilter");
 		// map.put("/admin/role/**", "adminUrlFilter");
-		map.put("/admin/**", "authc");
+		map.put("/**", "authc");
 		System.out.println("map: " + map);
 		// 登录页面
 		shiroFilterFactoryBean.setLoginUrl("/admin/login/toLogin");

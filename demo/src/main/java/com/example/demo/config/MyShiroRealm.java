@@ -3,7 +3,6 @@ package com.example.demo.config;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -16,7 +15,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -42,7 +40,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
 
 		SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-		Session session = new Subject.Builder().buildSubject().getSession();
+		Session session = SecurityUtils.getSubject().getSession();
 		User user = (User) session.getAttribute("user");
 		List<Menu> menuList = menuService.selectByUserId(user.getId());
 		logger.info("menuList: " + menuList);
@@ -76,12 +74,12 @@ public class MyShiroRealm extends AuthorizingRealm {
 		 * 第一个参数随便放，可以放user对象，程序可在任意位置获取 放入的对象 第二个参数必须放密码， 第三个参数放
 		 * 当前realm的名字，因为可能有多个realm
 		 */
-		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user.getName(), user.getPassword(), this.getName());
+		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user, user.getPassword(), this.getName());
 
 		
 		// 清之前的授权信息
 		super.clearCachedAuthorizationInfo(authcInfo.getPrincipals());
-		new Subject.Builder().buildSubject().getSession().setAttribute("user", user);
+		SecurityUtils.getSubject().getSession().setAttribute("user", user);
 		return authcInfo;
 	}
 

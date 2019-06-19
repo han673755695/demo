@@ -136,7 +136,7 @@ public class RoleController {
 			String id = role.getId();
 			String idsStr = request.getParameter("menuIds");
 			
-			User user = (User) new Subject.Builder().buildSubject().getSession().getAttribute("user");
+			User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
 			if (StringUtils.isEmpty(id)) {
 				//保存角色信息
 				String roleId = UUIDUtils.getUUID();
