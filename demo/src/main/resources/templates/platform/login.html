@@ -59,8 +59,13 @@
 			})
 		</script>
 		<!-- 底部结束 -->
-		<script>
-		
+		<script type="text/javascript">
+			/* 解决在ifream框架打开登录页 */
+			$(function() {
+				if (window != top) {
+					top.location.href = location.href;
+				}
+			});
 		</script>
 	</body>
 
