@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="${package}.dao.${entryName}Mapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="${package}.domain.${entryName}">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<#if columnsList?exists && (columnsList?size gt 0)>
+			<#list columnsList as fieldItem >
+				<#if fieldItem.COLUMN_NAME != 'id'>
+		<result column="${fieldItem.COLUMN_NAME}" property="${fieldItem.entryClumu}" jdbcType="${fieldItem.DATA_TYPE}" />
+				</#if>
+			</#list>
+		</#if>
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		<#if columnsList?exists && (columnsList?size gt 0)>
+			<#list columnsList as fieldItem >
+				<#if columnsList?size == fieldItem_index + 1>
+		${fieldItem.COLUMN_NAME}
+				<#else>
+		${fieldItem.COLUMN_NAME},
+				</#if>
+			</#list>
+		</#if>
+	</sql>
+	
+	
+	<!-- 根据实体类查询 -->
+	<select id="selectListByMenu" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+			<include refid="Base_Column_List" />
+		
+		from ${tableName}
+		where 1=1
+<#if columnsList?exists && (columnsList?size gt 0)>
+	<#list columnsList as fieldItem >
+		<if test="${fieldItem.COLUMN_NAME} != null and ${fieldItem.COLUMN_NAME} != '' ">
+			<#if fieldItem.DATA_TYPE == 'datetime'>
+				and DATE_FORMAT(${fieldItem.COLUMN_NAME},'%Y-%m-%d') = DATE_FORMAT(${jinghao}${fieldItem.entryClumu}${suffix},'%Y-%m-%d')
+			<#else>
+				and ${fieldItem.COLUMN_NAME} = ${jinghao}${fieldItem.entryClumu}${suffix}
+			</#if>
+		</if>
+	</#list>
+</#if>
+		ORDER BY id
+		
+	</select>
+	
+	
+	<!-- 查询数量 -->
+	<select id="totalCount" resultType="Integer"
+		parameterType="Map">
+		select
+			count(id) totalCount
+		from ${tableName}
+		where 1=1
+<#if columnsList?exists && (columnsList?size gt 0)>
+	<#list columnsList as fieldItem >
+		<if test="${fieldItem.COLUMN_NAME} != null and ${fieldItem.COLUMN_NAME} != '' ">
+			<#if fieldItem.DATA_TYPE == 'datetime'>
+				and DATE_FORMAT(${fieldItem.COLUMN_NAME},'%Y-%m-%d') = DATE_FORMAT(${jinghao}${fieldItem.entryClumu}${suffix},'%Y-%m-%d')
+			<#else>
+				and ${fieldItem.COLUMN_NAME} = ${jinghao}${fieldItem.entryClumu}${suffix}
+			</#if>
+		</if>
+	</#list>
+</#if>
+	</select>
+	
+	
+	<!-- 根据主键id查询 -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from ${tableName}
+		where id=${jinghao}id${suffix}
+	</select>
+	
+	<!-- 根据主键id删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="list">
+		delete from ${tableName}
+		where id in 
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+			${jinghao}id${suffix}
+		</foreach>
+	</delete>
+	
+	
+	<!-- 添加数据 -->
+	<insert id="insert"
+		parameterType="${package}.domain.${entryName}">
+		insert into ${tableName} (
+		<#if columnsList?exists && (columnsList?size gt 0)>
+			<#list columnsList as fieldItem >
+				<#if columnsList?size == fieldItem_index + 1>
+			${fieldItem.COLUMN_NAME}
+				<#else>
+			${fieldItem.COLUMN_NAME},
+				</#if>
+			</#list>
+		</#if>)
+		values (
+		<#if columnsList?exists && (columnsList?size gt 0)>
+			<#list columnsList as fieldItem >
+				<#if columnsList?size == fieldItem_index + 1>
+			${jinghao}${fieldItem.entryClumu}${suffix}
+				<#else>
+			${jinghao}${fieldItem.entryClumu}${suffix},
+				</#if>
+			</#list>
+		</#if>
+		
+		)
+		
+		
+	</insert>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="insertActive"
+		parameterType="${package}.domain.${entryName}">
+		insert into ${tableName}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+			<#if columnsList?exists && (columnsList?size gt 0)>
+				<#list columnsList as fieldItem >
+					<if test="fieldItem.entryClumu != null">
+						${fieldItem.COLUMN_NAME},
+					</if>
+				</#list>
+			</#if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<#if columnsList?exists && (columnsList?size gt 0)>
+				<#list columnsList as fieldItem >
+					<if test="fieldItem.entryClumu != null">
+						${fieldItem.COLUMN_NAME} = ${jinghao}${fieldItem.entryClumu},jdbcType=${fieldItem.DATA_TYPE}${suffix},
+					</if>
+				</#list>
+			</#if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveByMenu" parameterType="map">
+		update ${tableName}
+		<set>
+			<#if columnsList?exists && (columnsList?size gt 0)>
+				<#list columnsList as fieldItem >
+					<#if fieldItem.COLUMN_NAME != 'id'>
+						<if test="fieldItem.entryClumu != null">
+							${fieldItem.COLUMN_NAME} = ${jinghao}${fieldItem.entryClumu},jdbcType=${fieldItem.DATA_TYPE}${suffix},
+						</if>
+					</#if>
+				</#list>
+			</#if>
+		</set>
+		WHERE
+		id=${jinghao}id,jdbcType=VARCHAR${suffix}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateByMenu" parameterType="map">
+		update ${tableName}
+		set 
+		<#if columnsList?exists && (columnsList?size gt 0)>
+			<#list columnsList as fieldItem >
+				<#if fieldItem.COLUMN_NAME != 'id'>
+					${fieldItem.COLUMN_NAME} = ${jinghao}${fieldItem.entryClumu},jdbcType=${fieldItem.DATA_TYPE}${suffix},
+				</#if>
+			</#list>
+		</#if>
+		WHERE
+		id=${jinghao}id,jdbcType=VARCHAR${suffix}
+	</update>
+	
+</mapper>

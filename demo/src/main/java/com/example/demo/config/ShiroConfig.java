@@ -45,7 +45,7 @@ public class ShiroConfig {
 	}
 
 	// shiro在页面中使用标签
-	@Bean
+	@Bean("configuration")
 	public freemarker.template.Configuration setConfiguration(freemarker.template.Configuration cong) {
 		cong.setSharedVariable("shiro", new ShiroTags());
 		return cong;
@@ -67,6 +67,7 @@ public class ShiroConfig {
 		map.put("/admin/login/logout", "logout");
 		// 静态资源
 		map.put("/platform/**", "anon");
+		map.put("/generator/**", "anon");
 		// 登陆接口
 		map.put("/admin/login/login", "anon");
 		map.put("/admin/login/toLogin", "anon");

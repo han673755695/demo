@@ -1,0 +1,17 @@
+<form action="/save">
+
+    <#if columnsList?exists && columnsList?size gt 0>
+        <#list columnsList as fieldItem >
+            <div class="form-group">
+                <label for="${fieldItem.COLUMN_NAME}Label">${fieldItem.COLUMN_COMMENT}</label>
+                <#if (fieldItem.DATA_TYPE)?? && (fieldItem.DATA_TYPE == 'datetime')>
+                	<input type="datetime" value="${prefix}(${fieldItem.COLUMN_NAME}?string('yyyy-MM-dd HH:mm:ss'))!''${suffix}" class="form-control" id="${fieldItem.COLUMN_NAME}" name="${fieldItem.COLUMN_NAME}" placeholder="请输入${fieldItem.COLUMN_COMMENT}">
+                <#else>
+                	<input type="text" value="${prefix}(${fieldItem.COLUMN_NAME})!''${suffix}" class="form-control" id="${fieldItem.COLUMN_NAME}" name="${fieldItem.COLUMN_NAME}" placeholder="请输入${fieldItem.COLUMN_COMMENT}">
+                </#if>
+            </div>
+        </#list>
+    </#if>
+
+    <button type="submit" class="btn btn-primary">保存</button>
+</form>
