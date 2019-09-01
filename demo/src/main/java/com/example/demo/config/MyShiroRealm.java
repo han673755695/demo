@@ -37,13 +37,23 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 	//授权
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 
+		// 因为非正常退出，即没有显式调用 SecurityUtils.getSubject().logout()
+		// (可能是关闭浏览器，或超时)，但此时缓存依旧存在(principals)，所以会自己跑到授权方法里。
+		if (!SecurityUtils.getSubject().isAuthenticated()) {
+			doClearCache(principalCollection);
+			SecurityUtils.getSubject().logout();
+			return null;
+		}
+		
 		SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-		Session session = SecurityUtils.getSubject().getSession();
-		User user = (User) session.getAttribute("user");
-		List<Menu> menuList = menuService.selectByUserId(user.getId());
-		logger.info("menuList: " + menuList);
+//		Session session = SecurityUtils.getSubject().getSession();
+//		User user = (User) session.getAttribute("user");
+		
+		String userId = (String) principalCollection.getPrimaryPrincipal();
+		
+		List<Menu> menuList = menuService.selectByUserId(userId);
 		for (Menu menu : menuList) {
 			if (!StringUtils.isEmpty(menu.getUrl())) {
 				simpleAuthorInfo.addStringPermission(menu.getUrl());
@@ -74,7 +84,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 		 * 第一个参数随便放，可以放user对象，程序可在任意位置获取 放入的对象 第二个参数必须放密码， 第三个参数放
 		 * 当前realm的名字，因为可能有多个realm
 		 */
-		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user, user.getPassword(), this.getName());
+		AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user.getId(), user.getPassword(), this.getName());
 
 		
 		// 清之前的授权信息
