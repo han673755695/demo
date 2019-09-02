@@ -197,6 +197,11 @@ public class ConsumerController {
 				user.setUpdateDate(new Date());
 				int id = userService.updateByPrimaryKeySelective(user);
 				success.setData(id);
+				
+//				roleService;
+				List<Role> roleList = userRoleService.queryRoleByUserId(user.getId());
+				
+				
 			} else {
 				// 增加
 				logger.info("添加用户");

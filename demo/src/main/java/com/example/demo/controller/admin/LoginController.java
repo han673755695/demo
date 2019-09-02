@@ -1,13 +1,11 @@
 package com.example.demo.controller.admin;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
 import com.example.demo.common.ResultData;
-import com.example.demo.domain.User;
 import com.example.demo.service.IUserService;
 import com.example.demo.utils.RequestParamUtils;
 
@@ -34,8 +31,6 @@ public class LoginController {
 
 	@RequestMapping("/toLogin")
 	public String toLogin(Model model, HttpServletRequest request) {
-
-		logger.info("进入登陆页面");
 
 		return "/platform/login";
 	}
@@ -80,22 +75,5 @@ public class LoginController {
 		return success;
 	}
 
-	/**
-	 * 退出登陆	shiro拦截退出方法不走这里
-	 * 
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-//	@RequestMapping("/logout")
-//	public String logout(Model model, HttpServletRequest request) {
-//		try {
-//			System.out.println("退出登陆");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw new RuntimeException("退出异常");
-//		}
-//		return "/platform/login";
-//	}
 
 }

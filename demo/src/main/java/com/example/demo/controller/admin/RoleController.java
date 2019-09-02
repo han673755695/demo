@@ -1,6 +1,5 @@
 package com.example.demo.controller.admin;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
-import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
 import com.example.demo.domain.Menu;
 import com.example.demo.domain.Role;
 import com.example.demo.domain.RoleMenu;
 import com.example.demo.domain.User;
 import com.example.demo.eunm.CommonEunm;
-import com.example.demo.eunm.RedisKeyEnum;
 import com.example.demo.service.IMenuService;
 import com.example.demo.service.IRoleMenuService;
 import com.example.demo.service.IRoleService;
@@ -101,19 +97,8 @@ public class RoleController {
 	public String toSave(Model model, HttpServletRequest request, Role role) {
 		try {
 			Map<String, Object> parameterMap = RequestParamUtils.getParameterMap(request);
-			//菜单和按钮全部查询
-			if (redisTemplate.hasKey(RedisKeyEnum.MENUKEY_ALL.getValue())) {
-				List<Menu> menuList = (List<Menu>) redisTemplate.opsForValue().get(RedisKeyEnum.MENUKEY_ALL.getValue());
-				if (menuList != null && menuList.size() > 0) {
-					model.addAttribute("resultdata", menuList);
-					logger.info("从redis中获取全部菜单,包含按钮");
-					return "/platform/role/roleAdd";
-				}
-			}
-			logger.info("从数据库中获取全部菜单,包含按钮");
 			List<Menu> menuList = menuService.selectMenuByPid(parameterMap);
 			model.addAttribute("resultdata", menuList);
-			redisTemplate.opsForValue().set(RedisKeyEnum.MENUKEY_ALL.getValue(), menuList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -205,19 +190,8 @@ public class RoleController {
 			ResultData resultData = editRoleJson(model, request, role);
 			System.out.println(resultData.getData());
 			model.addAttribute("roleData", resultData.getData());
-			//菜单和按钮全部查询
-			if (redisTemplate.hasKey(RedisKeyEnum.MENUKEY_ALL.getValue())) {
-				List<Menu> menuList = (List<Menu>) redisTemplate.opsForValue().get(RedisKeyEnum.MENUKEY_ALL.getValue());
-				if (menuList != null && menuList.size() > 0) {
-					model.addAttribute("resultdata", menuList);
-					logger.info("从redis中获取全部菜单,包含按钮");
-					return "/platform/role/roleAdd";
-				}
-			}
-			logger.info("从数据库中获取全部菜单,包含按钮");
 			List<Menu> menuList = menuService.selectMenuByPid(parameterMap);
 			model.addAttribute("resultdata", menuList);
-			redisTemplate.opsForValue().set(RedisKeyEnum.MENUKEY_ALL.getValue(), menuList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

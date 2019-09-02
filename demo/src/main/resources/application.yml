@@ -20,6 +20,8 @@ spring:
 ####静态资源配置
   resources:
     static-locations: classpath:/static/,classpath:/public/
+  cacheManager: 
+    principalIdFieldName: userId
 
 ###json配置
   jackson:
