@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.example.demo.common.Page;
 import com.example.demo.common.ResultData;
 import com.example.demo.domain.Menu;
+import com.example.demo.domain.User;
 import com.example.demo.eunm.CommonEunm;
 import com.example.demo.service.IMenuService;
 import com.example.demo.utils.RequestParamUtils;
@@ -244,7 +247,10 @@ public class MenuController {
 			Map<String, Object> parameterMap = RequestParamUtils.getParameterMap(request);
 			String menuType = (String) parameterMap.get("menuType");
 			if (CommonEunm.menuType.菜单.getValue().equals(menuType)) {
-				List<Menu> menuList = menuService.selectMenuByPid(parameterMap);
+				//List<Menu> menuList = menuService.selectMenuByPid(parameterMap);
+				Subject subject = SecurityUtils.getSubject();
+				User user = (User) subject.getSession().getAttribute("user");
+				List<Menu> menuList = menuService.selectByUserId(user.getId());
 				success.setData(menuList);
 			}else {
 				List<Menu> menuList = menuService.selectMenuByPid(parameterMap);

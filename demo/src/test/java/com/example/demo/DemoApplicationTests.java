@@ -45,8 +45,11 @@ public class DemoApplicationTests {
 	}
 	
 	public static void main(String[] args) {
-		String uuid = UUIDUtils.getUUID();
-		System.out.println(uuid);
+		for (int i = 0; i < 10; i++) {
+			
+			String uuid = UUIDUtils.getUUID();
+			System.out.println(uuid);
+		}
 	}
 
 }

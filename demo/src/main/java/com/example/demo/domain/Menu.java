@@ -1,7 +1,9 @@
 package com.example.demo.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Menu implements Serializable {
 	private String id;
@@ -25,6 +27,8 @@ public class Menu implements Serializable {
 	private String icon;
 
 	private String active;
+
+	private List<Menu> childMenuList = new ArrayList<Menu>();
 
 	public String getIcon() {
 		return icon;
@@ -114,11 +118,19 @@ public class Menu implements Serializable {
 		this.active = active;
 	}
 
+	public List<Menu> getChildMenuList() {
+		return childMenuList;
+	}
+
+	public void setChildMenuList(List<Menu> childMenuList) {
+		this.childMenuList = childMenuList;
+	}
+
 	@Override
 	public String toString() {
 		return "Menu [id=" + id + ", parentId=" + parentId + ", createDate=" + createDate + ", updateDate=" + updateDate
 				+ ", name=" + name + ", menuType=" + menuType + ", status=" + status + ", sort=" + sort + ", url=" + url
-				+ ", icon=" + icon + ", active=" + active + "]";
+				+ ", icon=" + icon + ", active=" + active + ", childMenuList=" + childMenuList + "]";
 	}
 
 }
